@@ -1,0 +1,16 @@
+{
+    "printWidth": 80,
+    "tabWidth": 4,
+    "trailingComma": "all",
+    "endOfLine": "auto",
+    "importOrder": [
+        "^@local",
+        "^@(?!tanstack|radix|hookform|sentry)",
+        "^../(.*)",
+        "^./(.*)"
+    ],
+    "importOrderSeparation": true,
+    "importOrderSortSpecifiers": true,
+    "importOrderParserPlugins": ["typescript", "decorators-legacy", "jsx"],
+    "plugins": ["@trivago/prettier-plugin-sort-imports"]
+}
