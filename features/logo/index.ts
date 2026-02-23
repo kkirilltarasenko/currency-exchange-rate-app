@@ -1,0 +1,1 @@
+export { CurrencyExchangeLogo } from './components/currency-exchange-logo';

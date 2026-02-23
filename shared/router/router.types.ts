@@ -11,22 +11,22 @@ export type TRoute = typeof Routes[keyof typeof Routes];
 
 export const LINKS = [
   {
-    title: "Home",
+    title: "Главная",
     path: Routes.HOME,
     icon: FiHome,
   },
   {
-    title: "Exchange Rates",
+    title: "Валютные Курсы",
     path: Routes.RATES,
     icon: FiTrendingUp,
   },
   {
-    title: "History",
+    title: "История",
     path: Routes.HISTORY,
     icon: FiBarChart,
   },
   {
-    title: "Settings",
+    title: "Настройки",
     path: Routes.SETTINGS,
     icon: FiSettings,
   }

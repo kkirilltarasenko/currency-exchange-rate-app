@@ -1,5 +1,5 @@
 import { usePathname } from "next/navigation";
-import { type TRoute } from "../router/router.types";
+import { LINKS, type TRoute } from "../router/router.types";
 
 export const useCurrentRouteInfo = () => {
   const pathname = usePathname();
@@ -12,8 +12,15 @@ export const useCurrentRouteInfo = () => {
   }
 
   const getPageTitle = () => {
-    const path = pathname.replace("/", "");
-    return path.charAt(0).toUpperCase() + path.slice(1)
+    const pageTitle = LINKS.find(({ path }) => (
+      path === pathname
+    ));
+
+    if (pageTitle) {
+      return pageTitle.title;
+    }
+
+    return "404"
   }
 
   return { getPageTitle, getIsActiveRoute };

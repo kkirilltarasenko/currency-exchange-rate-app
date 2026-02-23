@@ -3,6 +3,7 @@
 import { Box, HStack, Icon, Text, VStack } from "@chakra-ui/react";
 import { LINKS } from "@/shared/router/router.types";
 import { useCurrentRouteInfo } from "@/shared/hooks/use-current-route-info";
+import { CurrencyExchangeLogo } from "@/features/logo";
 import Link from "next/link";
 
 export function Sidebar() {
@@ -22,9 +23,7 @@ export function Sidebar() {
     >
       <Box p={6} borderBottom="2px" borderColor="blue.400">
         <HStack gap={2}>
-          <Box w={8} h={8} bg="blue.500" borderRadius="md" display="flex" alignItems="center" justifyContent="center">
-            <Text color="white" fontWeight="bold" fontSize="sm">CE</Text>
-          </Box>
+          <CurrencyExchangeLogo size={48} />
           <Text fontSize="lg" fontWeight="bold" color="gray.900">
             Currency Exchange
           </Text>
