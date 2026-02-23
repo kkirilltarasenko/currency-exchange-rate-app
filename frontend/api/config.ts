@@ -4,8 +4,10 @@ export const API_CONFIG = {
 
 export const API_ENDPOINTS = {
   HELLO: "/hello/world",
+  ALFA_BANK_RATES: "/alfa-bank/rates",
 } as const;
 
 export const QUERY_KEYS = {
-  HELLO: "/hello/world",
+  HELLO: "HELLO",
+  ALFA_BANK_RATES: "ALFA_BANK_RATES",
 } as const;

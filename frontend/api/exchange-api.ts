@@ -1,9 +1,9 @@
 import { httpClient } from "./http-client";
 import { API_ENDPOINTS } from "./config";
-import { HelloWorldResponse } from "@contracts/hello.types";
+import { BankRatesResponse } from "@contracts/bank.types";
 
 export class ExchangeApi {
-  static async getHelloWorld() {
-    return httpClient.get<HelloWorldResponse>(API_ENDPOINTS.HELLO);
+  static async getAlfaBankRates() {
+    return httpClient.get<BankRatesResponse>(API_ENDPOINTS.ALFA_BANK_RATES);
   }
 }

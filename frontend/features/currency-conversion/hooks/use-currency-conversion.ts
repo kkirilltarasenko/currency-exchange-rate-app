@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { BankRate, ConversionResult, Currency } from "../types";
+import { ConversionResult, Currency } from "../types";
 
 const CURRENCIES: Currency[] = [
   { code: 'USD', name: 'US Dollar', symbol: '$' },
@@ -10,116 +10,6 @@ const CURRENCIES: Currency[] = [
   { code: 'RUB', name: 'Russian Ruble', symbol: '₽' },
 ];
 
-const MOCK_BANK_RATES: BankRate[] = [
-  {
-    id: '1',
-    bankName: 'Беларусбанк',
-    bankLogo: '/banks/belarusbank.png',
-    buyRate: 3.25,
-    sellRate: 3.35,
-    currency: 'USD',
-    baseCurrency: 'BYN',
-    lastUpdated: new Date(),
-  },
-  {
-    id: '2',
-    bankName: 'Альфа-Банк',
-    bankLogo: '/banks/alfabank.png',
-    buyRate: 3.24,
-    sellRate: 3.36,
-    currency: 'USD',
-    baseCurrency: 'BYN',
-    lastUpdated: new Date(),
-  },
-  {
-    id: '3',
-    bankName: 'БПС-Сбербанк',
-    bankLogo: '/banks/bps-sberbank.png',
-    buyRate: 3.23,
-    sellRate: 3.37,
-    currency: 'USD',
-    baseCurrency: 'BYN',
-    lastUpdated: new Date(),
-  },
-  {
-    id: '4',
-    bankName: 'Приорбанк',
-    bankLogo: '/banks/priorbank.png',
-    buyRate: 3.26,
-    sellRate: 3.34,
-    currency: 'USD',
-    baseCurrency: 'BYN',
-    lastUpdated: new Date(),
-  },
-  {
-    id: '57',
-    bankName: 'БелВЭБ',
-    bankLogo: '/banks/belveb.png',
-    buyRate: 3.22,
-    sellRate: 3.38,
-    currency: 'USD',
-    baseCurrency: 'BYN',
-    lastUpdated: new Date(),
-  },
-  {
-    id: '56',
-    bankName: 'БелВЭБ',
-    bankLogo: '/banks/belveb.png',
-    buyRate: 3.22,
-    sellRate: 3.38,
-    currency: 'USD',
-    baseCurrency: 'BYN',
-    lastUpdated: new Date(),
-  },
-  {
-    id: '55',
-    bankName: 'БелВЭБ',
-    bankLogo: '/banks/belveb.png',
-    buyRate: 3.22,
-    sellRate: 3.38,
-    currency: 'USD',
-    baseCurrency: 'BYN',
-    lastUpdated: new Date(),
-  },
-  {
-    id: '54',
-    bankName: 'БелВЭБ',
-    bankLogo: '/banks/belveb.png',
-    buyRate: 3.22,
-    sellRate: 3.38,
-    currency: 'USD',
-    baseCurrency: 'BYN',
-    lastUpdated: new Date(),
-  },{
-    id: '53',
-    bankName: 'БелВЭБ',
-    bankLogo: '/banks/belveb.png',
-    buyRate: 3.22,
-    sellRate: 3.38,
-    currency: 'USD',
-    baseCurrency: 'BYN',
-    lastUpdated: new Date(),
-  },{
-    id: '52',
-    bankName: 'БелВЭБ',
-    bankLogo: '/banks/belveb.png',
-    buyRate: 3.22,
-    sellRate: 3.38,
-    currency: 'USD',
-    baseCurrency: 'BYN',
-    lastUpdated: new Date(),
-  },
-  {
-    id: '51',
-    bankName: 'БелВЭБ',
-    bankLogo: '/banks/belveb.png',
-    buyRate: 3.22,
-    sellRate: 3.38,
-    currency: 'USD',
-    baseCurrency: 'BYN',
-    lastUpdated: new Date(),
-  },
-];
 
 const MOCK_RATES: Record<string, Record<string, number>> = {
   USD: { EUR: 0.92, BYN: 3.3, RUB: 95.5, PLN: 4.1, UAH: 41.2 },
@@ -180,9 +70,6 @@ export const useCurrencyConversion = () => {
     void performConversion();
   }, [fromCurrency, toCurrency, fromAmount, toAmount, lastEditedField, getExchangeRate]);
 
-  const getBankRates = useCallback((): BankRate[] => {
-    return MOCK_BANK_RATES;
-  }, []);
 
   const swapCurrencies = useCallback(() => {
     const tempCurrency = fromCurrency;
@@ -216,7 +103,6 @@ export const useCurrencyConversion = () => {
     updateFromAmount,
     updateToAmount,
     convertCurrency,
-    getBankRates,
     swapCurrencies,
     getExchangeRate,
   };

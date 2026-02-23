@@ -11,16 +11,6 @@ export interface ExchangeRate {
   timestamp: Date;
 }
 
-export interface BankRate {
-  id: string;
-  bankName: string;
-  bankLogo: string;
-  buyRate: number;
-  sellRate: number;
-  currency: string;
-  baseCurrency: string;
-  lastUpdated: Date;
-}
 
 export interface ConversionResult {
   amount: number;
