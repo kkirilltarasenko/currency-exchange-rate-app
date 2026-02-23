@@ -1,19 +1,22 @@
 "use client";
 
-import { Box, Text, } from "@chakra-ui/react";
+import { Box, Text } from "@chakra-ui/react";
 import { useCurrencyConversion } from "../hooks/use-currency-conversion";
+import { useCurrencyConversionsQuery } from "../hooks/use-currency-conversions.query";
 
 export const BankRatesTable = () => {
   const { getBankRates } = useCurrencyConversion();
   const bankRates = getBankRates();
 
+  const query = useCurrencyConversionsQuery();
+
   const formatDate = (date: Date) => {
-    return date.toLocaleDateString('ru-RU', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
+    return date.toLocaleDateString("ru-RU", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
     });
   };
 
@@ -21,7 +24,8 @@ export const BankRatesTable = () => {
     <Box w="100%" h="100%" py={4} display="flex" flexDirection="column">
       <Box mb={4}>
         <Text fontSize="xl" fontWeight="600" color="black" mb={2}>
-          Курсы банков
+          Курсы банков, {query?.data?.message}&nbsp;
+          {new Date(query?.data?.timestamp || "").toUTCString()}
         </Text>
         <Text fontSize="sm" color="gray.600">
           Актуальные курсы покупки и продажи валют
@@ -115,7 +119,14 @@ export const BankRatesTable = () => {
         ))}
       </Box>
 
-      <Box mt={4} p={3} bg="gray.50" borderRadius="8px" border="1px solid" borderColor="gray.200">
+      <Box
+        mt={4}
+        p={3}
+        bg="gray.50"
+        borderRadius="8px"
+        border="1px solid"
+        borderColor="gray.200"
+      >
         <Text fontSize="sm" color="gray.600" textAlign="center">
           Курсы обновляются в режиме реального времени
         </Text>
