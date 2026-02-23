@@ -3,8 +3,13 @@
 import { Box, Stack } from "@chakra-ui/react";
 import { CurrencyConverter } from "@/features/currency-conversion/components/currency-converter";
 import { BankRatesTable } from "@/features/currency-conversion/components/bank-rates-table";
+import { useCurrencyConversion } from "@/features/currency-conversion/hooks/use-currency-conversion";
 
 export const CurrencyExchangeWidget = () => {
+  // Получаем выбранные валюты из хука
+  const { fromCurrency, toCurrency } = useCurrencyConversion();
+  
+  
   return (
     <Box
       w="100%"
@@ -22,7 +27,10 @@ export const CurrencyExchangeWidget = () => {
         </Box>
 
         <Box flex="1" overflow="hidden">
-          <BankRatesTable />
+          <BankRatesTable
+            fromCurrency={fromCurrency}
+            toCurrency={toCurrency}
+          />
         </Box>
       </Stack>
     </Box>

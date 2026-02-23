@@ -2,36 +2,63 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { ConversionResult, Currency } from "../types";
+import { useCurrencyRatesQuery } from "./use-currency-rates.query";
 
 const CURRENCIES: Currency[] = [
   { code: 'USD', name: 'US Dollar', symbol: '$' },
-  { code: 'EUR', name: 'Euro', symbol: '€' },
   { code: 'BYN', name: 'Belarusian Ruble', symbol: 'Br' },
-  { code: 'RUB', name: 'Russian Ruble', symbol: '₽' },
 ];
-
-
-const MOCK_RATES: Record<string, Record<string, number>> = {
-  USD: { EUR: 0.92, BYN: 3.3, RUB: 95.5, PLN: 4.1, UAH: 41.2 },
-  EUR: { USD: 1.09, BYN: 3.6, RUB: 104.2, PLN: 4.47, UAH: 44.9 },
-  BYN: { USD: 0.303, EUR: 0.278, RUB: 28.9, PLN: 1.24, UAH: 12.5 },
-  RUB: { USD: 0.0105, EUR: 0.0096, BYN: 0.0346, PLN: 0.043, UAH: 0.432 },
-  PLN: { USD: 0.244, EUR: 0.224, BYN: 0.806, RUB: 23.3, UAH: 10.05 },
-  UAH: { USD: 0.0243, EUR: 0.0223, BYN: 0.08, RUB: 2.31, PLN: 0.0995 },
-};
 
 export const useCurrencyConversion = () => {
   const [fromCurrency, setFromCurrency] = useState<Currency>(CURRENCIES[0]);
-  const [toCurrency, setToCurrency] = useState<Currency>(CURRENCIES[2]);
+  const [toCurrency, setToCurrency] = useState<Currency>(CURRENCIES[1]);
   const [fromAmount, setFromAmount] = useState<number>(1);
   const [toAmount, setToAmount] = useState<number>(0);
   const [isLoading, setIsLoading] = useState(false);
   const [lastEditedField, setLastEditedField] = useState<'from' | 'to'>('from');
+  const [isSwapping, setIsSwapping] = useState(false);
 
-  const getExchangeRate = useCallback((from: Currency, to: Currency): number => {
+  const { data: bankData, isLoading: isLoadingRates } = useCurrencyRatesQuery();
+
+  const getBestExchangeRate = useCallback((from: Currency, to: Currency): number => {
     if (from.code === to.code) return 1;
-    return MOCK_RATES[from.code]?.[to.code] || 1;
-  }, []);
+    
+    if (!bankData?.rates) {
+      console.warn('Банковские курсы не загружены, используется курс 1:1');
+      return 1;
+    }
+
+    const relevantRates = bankData.rates.filter(rate => {
+      const isDirectPair = rate.sellIso === from.code && rate.buyIso === to.code;
+      const isReversePair = rate.sellIso === to.code && rate.buyIso === from.code;
+      return isDirectPair || isReversePair;
+    });
+
+    if (relevantRates.length === 0) {
+      console.warn(`Курс для пары ${from.code}/${to.code} не найден`);
+      return 1;
+    }
+
+    let bestRate = 0;
+    
+    relevantRates.forEach(rate => {
+      let currentRate = 0;
+      
+      if (rate.sellIso === from.code && rate.buyIso === to.code) {
+        currentRate = rate.sellRate / rate.quantity;
+      } else if (rate.sellIso === to.code && rate.buyIso === from.code) {
+        currentRate = rate.quantity / rate.buyRate;
+      }
+      
+      if (currentRate > bestRate) {
+        bestRate = currentRate;
+      }
+    });
+
+    return bestRate || 1;
+  }, [bankData]);
+
+  const getExchangeRate = getBestExchangeRate;
 
   const convertCurrency = useCallback(async (
     amount: number,
@@ -57,6 +84,11 @@ export const useCurrencyConversion = () => {
   }, [getExchangeRate]);
 
   useEffect(() => {
+    // Не пересчитываем во время swap'а
+    if (isSwapping) {
+      return;
+    }
+
     const performConversion = async () => {
       if (lastEditedField === 'from' && fromAmount > 0) {
         const rate = getExchangeRate(fromCurrency, toCurrency);
@@ -68,10 +100,13 @@ export const useCurrencyConversion = () => {
     };
 
     void performConversion();
-  }, [fromCurrency, toCurrency, fromAmount, toAmount, lastEditedField, getExchangeRate]);
+  }, [fromCurrency, toCurrency, fromAmount, toAmount, lastEditedField, getExchangeRate, bankData, isSwapping]);
 
 
   const swapCurrencies = useCallback(() => {
+    // Устанавливаем флаг swap'а для предотвращения пересчета
+    setIsSwapping(true);
+    
     const tempCurrency = fromCurrency;
     const tempAmount = fromAmount;
     
@@ -79,7 +114,15 @@ export const useCurrencyConversion = () => {
     setToCurrency(tempCurrency);
     setFromAmount(toAmount);
     setToAmount(tempAmount);
-  }, [fromCurrency, toCurrency, fromAmount, toAmount]);
+    
+    // Меняем местами lastEditedField для корректного отображения
+    setLastEditedField(lastEditedField === 'from' ? 'to' : 'from');
+    
+    // Сбрасываем флаг swap'а после завершения
+    setTimeout(() => {
+      setIsSwapping(false);
+    }, 0);
+  }, [fromCurrency, toCurrency, fromAmount, toAmount, lastEditedField]);
 
   const updateFromAmount = useCallback((amount: number) => {
     setFromAmount(amount);
@@ -97,7 +140,7 @@ export const useCurrencyConversion = () => {
     toCurrency,
     fromAmount,
     toAmount,
-    isLoading,
+    isLoading: isLoading || isLoadingRates,
     setFromCurrency,
     setToCurrency,
     updateFromAmount,

@@ -20,6 +20,7 @@ export const CurrencyConverter = () => {
     getExchangeRate,
   } = useCurrencyConversion();
 
+
   const handleFromAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = parseFloat(e.target.value) || 0;
     updateFromAmount(value);
@@ -145,15 +146,18 @@ export const CurrencyConverter = () => {
 
           {fromAmount > 0 && toAmount > 0 && (
             <Box
-              p={2}
-              bg="gray.50"
-              borderRadius="6px"
+              p={3}
+              bg="blue.50"
+              borderRadius="8px"
               border="1px solid"
-              borderColor="gray.200"
+              borderColor="blue.200"
               textAlign="center"
             >
-              <Text fontSize="xs" color="gray.600">
+              <Text fontSize="sm" color="blue.800" fontWeight="500">
                 1 {fromCurrency.code} = {getExchangeRate(fromCurrency, toCurrency).toFixed(4)} {toCurrency.code}
+              </Text>
+              <Text fontSize="xs" color="blue.600" mt={1}>
+                💰 Лучший курс из банковских данных
               </Text>
             </Box>
           )}
