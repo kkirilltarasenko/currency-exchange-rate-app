@@ -28,7 +28,7 @@ export function MainLayout({ children }: MainLayoutProps) {
         <Box
           ml="280px"
           mt="70px"
-          p={8}
+          p={3}
           h="calc(100% - 70px)"
           display="flex"
           alignItems="center"

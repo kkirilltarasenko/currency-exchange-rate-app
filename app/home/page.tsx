@@ -1,5 +1,7 @@
+import { CurrencyExchangeWidget } from "@/widgets/currency-exchange-widget";
+
 const HomePage = () => {
-  return <div>Page</div>
-}
+  return <CurrencyExchangeWidget />;
+};
 
 export default HomePage;
