@@ -8,8 +8,6 @@ const CURRENCIES: Currency[] = [
   { code: 'EUR', name: 'Euro', symbol: '€' },
   { code: 'BYN', name: 'Belarusian Ruble', symbol: 'Br' },
   { code: 'RUB', name: 'Russian Ruble', symbol: '₽' },
-  { code: 'PLN', name: 'Polish Zloty', symbol: 'zł' },
-  { code: 'UAH', name: 'Ukrainian Hryvnia', symbol: '₴' },
 ];
 
 const MOCK_BANK_RATES: BankRate[] = [
