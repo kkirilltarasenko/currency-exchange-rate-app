@@ -8,7 +8,8 @@ describe('AlfaBankController', () => {
 
   const mockBankRatesResponse = {
     bankName: 'Альфа-Банк',
-    logoUrl: 'https://png.klev.club/uploads/posts/2024-04/png-klev-club-i9fp-p-logotip-alfa-bank-png-12.png',
+    logoUrl:
+      'https://png.klev.club/uploads/posts/2024-04/png-klev-club-i9fp-p-logotip-alfa-bank-png-12.png',
     rates: [
       {
         sellRate: 3.2,
@@ -59,22 +60,30 @@ describe('AlfaBankController', () => {
 
     it('should handle service errors', async () => {
       const errorMessage = 'Service unavailable';
-      jest.spyOn(service, 'getRates').mockRejectedValue(new Error(errorMessage));
+      jest
+        .spyOn(service, 'getRates')
+        .mockRejectedValue(new Error(errorMessage));
 
       await expect(controller.getRates()).rejects.toThrow(errorMessage);
       expect(service.getRates).toHaveBeenCalled();
     });
 
     it('should handle network timeout errors', async () => {
-      jest.spyOn(service, 'getRates').mockRejectedValue(new Error('Network timeout'));
+      jest
+        .spyOn(service, 'getRates')
+        .mockRejectedValue(new Error('Network timeout'));
 
       await expect(controller.getRates()).rejects.toThrow('Network timeout');
     });
 
     it('should handle invalid response format', async () => {
-      jest.spyOn(service, 'getRates').mockRejectedValue(new Error('Invalid response format'));
+      jest
+        .spyOn(service, 'getRates')
+        .mockRejectedValue(new Error('Invalid response format'));
 
-      await expect(controller.getRates()).rejects.toThrow('Invalid response format');
+      await expect(controller.getRates()).rejects.toThrow(
+        'Invalid response format',
+      );
     });
   });
 });

@@ -27,7 +27,9 @@ describe('Logger', () => {
       Logger.log(message);
 
       expect(consoleSpy.log).toHaveBeenCalledWith(
-        expect.stringMatching(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z Test log message$/),
+        expect.stringMatching(
+          /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z Test log message$/,
+        ),
       );
     });
 
@@ -37,7 +39,9 @@ describe('Logger', () => {
       Logger.log(message, context);
 
       expect(consoleSpy.log).toHaveBeenCalledWith(
-        expect.stringMatching(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z \[TestContext\] Test log message$/),
+        expect.stringMatching(
+          /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z \[TestContext\] Test log message$/,
+        ),
       );
     });
 
@@ -46,7 +50,9 @@ describe('Logger', () => {
       Logger.log(message, '');
 
       expect(consoleSpy.log).toHaveBeenCalledWith(
-        expect.stringMatching(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z Test log message$/),
+        expect.stringMatching(
+          /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z Test log message$/,
+        ),
       );
     });
   });
@@ -57,7 +63,9 @@ describe('Logger', () => {
       Logger.error(message);
 
       expect(consoleSpy.error).toHaveBeenCalledWith(
-        expect.stringMatching(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z ERROR: Test error message$/),
+        expect.stringMatching(
+          /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z ERROR: Test error message$/,
+        ),
       );
     });
 
@@ -67,7 +75,9 @@ describe('Logger', () => {
       Logger.error(message, undefined, context);
 
       expect(consoleSpy.error).toHaveBeenCalledWith(
-        expect.stringMatching(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z \[ErrorContext\] ERROR: Test error message$/),
+        expect.stringMatching(
+          /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z \[ErrorContext\] ERROR: Test error message$/,
+        ),
       );
     });
 
@@ -77,7 +87,9 @@ describe('Logger', () => {
       Logger.error(message, trace);
 
       expect(consoleSpy.error).toHaveBeenCalledWith(
-        expect.stringMatching(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z ERROR: Test error message$/),
+        expect.stringMatching(
+          /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z ERROR: Test error message$/,
+        ),
       );
       expect(consoleSpy.error).toHaveBeenCalledWith(trace);
     });
@@ -89,7 +101,9 @@ describe('Logger', () => {
       Logger.error(message, trace, context);
 
       expect(consoleSpy.error).toHaveBeenCalledWith(
-        expect.stringMatching(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z \[ErrorContext\] ERROR: Test error message$/),
+        expect.stringMatching(
+          /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z \[ErrorContext\] ERROR: Test error message$/,
+        ),
       );
       expect(consoleSpy.error).toHaveBeenCalledWith(trace);
     });
@@ -101,7 +115,9 @@ describe('Logger', () => {
       Logger.warn(message);
 
       expect(consoleSpy.warn).toHaveBeenCalledWith(
-        expect.stringMatching(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z WARN: Test warning message$/),
+        expect.stringMatching(
+          /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z WARN: Test warning message$/,
+        ),
       );
     });
 
@@ -111,7 +127,9 @@ describe('Logger', () => {
       Logger.warn(message, context);
 
       expect(consoleSpy.warn).toHaveBeenCalledWith(
-        expect.stringMatching(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z \[WarnContext\] WARN: Test warning message$/),
+        expect.stringMatching(
+          /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z \[WarnContext\] WARN: Test warning message$/,
+        ),
       );
     });
   });
@@ -122,7 +140,9 @@ describe('Logger', () => {
       Logger.debug(message);
 
       expect(consoleSpy.debug).toHaveBeenCalledWith(
-        expect.stringMatching(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z DEBUG: Test debug message$/),
+        expect.stringMatching(
+          /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z DEBUG: Test debug message$/,
+        ),
       );
     });
 
@@ -132,7 +152,9 @@ describe('Logger', () => {
       Logger.debug(message, context);
 
       expect(consoleSpy.debug).toHaveBeenCalledWith(
-        expect.stringMatching(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z \[DebugContext\] DEBUG: Test debug message$/),
+        expect.stringMatching(
+          /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z \[DebugContext\] DEBUG: Test debug message$/,
+        ),
       );
     });
   });
@@ -145,7 +167,9 @@ describe('Logger', () => {
 
       Logger.log('test message');
 
-      expect(consoleSpy.log).toHaveBeenCalledWith(`${mockTimestamp} test message`);
+      expect(consoleSpy.log).toHaveBeenCalledWith(
+        `${mockTimestamp} test message`,
+      );
 
       Date.prototype.toISOString = originalToISOString;
     });

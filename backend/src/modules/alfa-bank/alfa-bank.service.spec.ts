@@ -116,7 +116,7 @@ describe('AlfaBankService', () => {
             buyIso: 'BYN',
             quantity: 1,
             name: 'USD/BYN',
-            date: '2024-01-01T00:00:00Z'
+            date: '2024-01-01T00:00:00Z',
           },
           {
             sellRate: 3.8,
@@ -125,9 +125,9 @@ describe('AlfaBankService', () => {
             buyIso: 'BYN',
             quantity: 1,
             name: 'EUR/BYN',
-            date: '2024-01-01T00:00:00Z'
-          }
-        ]
+            date: '2024-01-01T00:00:00Z',
+          },
+        ],
       };
 
       const result = service['mapRates'](mockApiResponse);
@@ -149,13 +149,13 @@ describe('AlfaBankService', () => {
             buyIso: 'BYN',
             quantity: 1,
             name: 'USD/BYN',
-            date: '2024-01-01T00:00:00Z'
-          }
-        ]
+            date: '2024-01-01T00:00:00Z',
+          },
+        ],
       };
 
       const mockResponse = {
-        json: jest.fn().mockResolvedValue(mockApiResponse)
+        json: jest.fn().mockResolvedValue(mockApiResponse),
       };
 
       (global.fetch as jest.Mock).mockResolvedValue(mockResponse);
@@ -163,11 +163,12 @@ describe('AlfaBankService', () => {
       const result = await service.getRates();
 
       expect(fetch).toHaveBeenCalledWith(
-        'https://ibapi.alfabank.by:8273/partner/1.0.1/public/rates'
+        'https://ibapi.alfabank.by:8273/partner/1.0.1/public/rates',
       );
       expect(result).toEqual({
         bankName: 'Альфа-Банк',
-        logoUrl: 'https://png.klev.club/uploads/posts/2024-04/png-klev-club-i9fp-p-logotip-alfa-bank-png-12.png',
+        logoUrl:
+          'https://png.klev.club/uploads/posts/2024-04/png-klev-club-i9fp-p-logotip-alfa-bank-png-12.png',
         rates: [
           {
             sellRate: 3.2,
@@ -178,9 +179,9 @@ describe('AlfaBankService', () => {
             buyCode: 0,
             quantity: 1,
             name: 'USD/BYN',
-            date: '2024-01-01T00:00:00Z'
-          }
-        ]
+            date: '2024-01-01T00:00:00Z',
+          },
+        ],
       });
     });
 
@@ -192,7 +193,7 @@ describe('AlfaBankService', () => {
 
     it('should handle invalid JSON response', async () => {
       const mockResponse = {
-        json: jest.fn().mockRejectedValue(new Error('Invalid JSON'))
+        json: jest.fn().mockRejectedValue(new Error('Invalid JSON')),
       };
 
       (global.fetch as jest.Mock).mockResolvedValue(mockResponse);
