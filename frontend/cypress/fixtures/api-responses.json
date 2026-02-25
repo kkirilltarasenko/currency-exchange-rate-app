@@ -1,0 +1,36 @@
+{
+  "successResponse": {
+    "rates": [
+      {
+        "sellRate": 3.2,
+        "sellIso": "USD",
+        "buyRate": 3.1,
+        "buyIso": "BYN",
+        "quantity": 1,
+        "name": "USD/BYN",
+        "date": "2024-01-01T00:00:00Z"
+      },
+      {
+        "sellRate": 3.5,
+        "sellIso": "EUR",
+        "buyRate": 3.4,
+        "buyIso": "BYN",
+        "quantity": 1,
+        "name": "EUR/BYN",
+        "date": "2024-01-01T00:00:00Z"
+      }
+    ]
+  },
+  "emptyResponse": {
+    "rates": []
+  },
+  "errorResponse": {
+    "error": "Internal Server Error",
+    "message": "Failed to fetch exchange rates",
+    "statusCode": 500
+  },
+  "invalidResponse": {
+    "invalid": "data",
+    "structure": "wrong"
+  }
+}

@@ -1,5 +1,5 @@
 const ExchangeRatesPage = () => {
-  return <div>Page</div>
+  return <div data-testid="exchange-rates-page">Exchange Rates Page</div>
 }
 
 export default ExchangeRatesPage;

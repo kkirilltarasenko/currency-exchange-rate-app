@@ -33,12 +33,6 @@ export class AlfaBankService extends AbstractBank {
       date: rate.date ?? new Date().toISOString(),
     });
 
-    // API Альфа-банка возвращает массив курсов напрямую
-    if (Array.isArray(apiResponse)) {
-      return apiResponse.map(mapRate);
-    }
-
-    // Если API возвращает объект с массивом rates
     const typedRates = apiResponse as { rates?: AlfaBankApiRate[] };
     if (typedRates?.rates && Array.isArray(typedRates.rates)) {
       return typedRates.rates.map(mapRate);

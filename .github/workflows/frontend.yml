@@ -1,29 +1,90 @@
-name: Push analyze
+name: Frontend CI
 
 on:
   push:
-    branches: [ '**' ]
+    branches: [ main, develop ]
+    paths:
+      - 'frontend/**'
+      - 'contracts/**'
+  pull_request:
+    branches: [ main, develop ]
+    paths:
+      - 'frontend/**'
+      - 'contracts/**'
 
 jobs:
-  build-test-push:
+  frontend-ci:
     runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x]
 
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+    - name: Checkout code
+      uses: actions/checkout@v4
 
-      - uses: pnpm/action-setup@v4
-        with:
-          version: 10
+    - name: Setup Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'pnpm'
+        cache-dependency-path: frontend/pnpm-lock.yaml
 
-      - name: Install node_modules
-        working-directory: ./frontend
-        run: pnpm install
+    - name: Install pnpm
+      uses: pnpm/action-setup@v4
+      with:
+        version: 10.30.1
 
-      - name: Lint project files
-        working-directory: ./frontend
-        run: pnpm lint
+    - name: Install dependencies
+      run: |
+        cd frontend
+        pnpm install --frozen-lockfile
 
-      - name: Build project
-        working-directory: ./frontend
-        run: pnpm build
+    - name: Lint
+      run: |
+        cd frontend
+        pnpm run lint
+
+    - name: Build
+      run: |
+        cd frontend
+        pnpm run build
+
+    - name: Run unit tests
+      run: |
+        cd frontend
+        pnpm run test
+
+    - name: Run Cypress tests
+      uses: cypress-io/github-action@v6
+      with:
+        working-directory: frontend
+        build: pnpm run build
+        start: pnpm run start
+        wait-on: 'http://localhost:3000'
+        wait-on-timeout: 120
+        browser: chrome
+        record: false
+
+    - name: Upload test coverage
+      uses: codecov/codecov-action@v4
+      if: matrix.node-version == '20.x'
+      with:
+        file: frontend/coverage/lcov.info
+        flags: frontend
+        name: frontend-coverage
+
+    - name: Upload Cypress screenshots
+      uses: actions/upload-artifact@v4
+      if: failure()
+      with:
+        name: cypress-screenshots-${{ matrix.node-version }}
+        path: frontend/cypress/screenshots
+
+    - name: Upload Cypress videos
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: cypress-videos-${{ matrix.node-version }}
+        path: frontend/cypress/videos

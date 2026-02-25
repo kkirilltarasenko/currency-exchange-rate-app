@@ -37,7 +37,7 @@ export const CurrencyConverter = () => {
   };
 
   return (
-    <Box w="100%" py={4}>
+    <Box w="100%" py={4} data-testid="currency-converter">
       <Stack gap={4}>
         <Box>
           <Text fontSize="xl" fontWeight="600" color="black" mb={1}>
@@ -71,6 +71,7 @@ export const CurrencyConverter = () => {
                     boxShadow: "0 0 0 1px #3182CE"
                   }}
                   fontSize="md"
+                  data-testid="amount-input-from"
                 />
               </Box>
               <Box minW="100px">
@@ -81,6 +82,7 @@ export const CurrencyConverter = () => {
                   borderColor="blue.300"
                   bg="blue.50"
                   focusBorderColor="blue.500"
+                  testId="currency-select-from"
                 />
               </Box>
             </Stack>
@@ -102,6 +104,7 @@ export const CurrencyConverter = () => {
                 transform: "rotate(180deg)"
               }}
               transition="all 0.2s"
+              data-testid="swap-currencies-button"
             >
               <FaExchangeAlt size={14} />
             </Button>
@@ -129,6 +132,7 @@ export const CurrencyConverter = () => {
                     boxShadow: "0 0 0 1px #38A169"
                   }}
                   fontSize="md"
+                  data-testid="amount-input-to"
                 />
               </Box>
               <Box minW="100px">
@@ -139,6 +143,7 @@ export const CurrencyConverter = () => {
                   borderColor="green.300"
                   bg="green.50"
                   focusBorderColor="green.500"
+                  testId="currency-select-to"
                 />
               </Box>
             </Stack>
@@ -152,6 +157,7 @@ export const CurrencyConverter = () => {
               border="1px solid"
               borderColor="blue.200"
               textAlign="center"
+              data-testid="exchange-rate-display"
             >
               <Text fontSize="sm" color="blue.800" fontWeight="500">
                 1 {fromCurrency.code} = {getExchangeRate(fromCurrency, toCurrency).toFixed(4)} {toCurrency.code}

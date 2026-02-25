@@ -11,6 +11,7 @@ interface CurrencySelectProps {
   bg?: string;
   focusBorderColor?: string;
   placeholder?: string;
+  testId?: string;
 }
 
 export const CurrencySelect = ({
@@ -20,7 +21,8 @@ export const CurrencySelect = ({
   borderColor = "gray.300",
   bg = "white",
   focusBorderColor = "blue.500",
-  placeholder = "Выберите валюту"
+  placeholder = "Выберите валюту",
+  testId
 }: CurrencySelectProps) => {
   const currencyCollection = createListCollection({
     items: currencies.map(currency => ({
@@ -42,6 +44,7 @@ export const CurrencySelect = ({
           onCurrencyChange(selectedItem.currency);
         }
       }}
+      data-testid={testId}
     >
       <Select.HiddenSelect />
       <Select.Control>
@@ -66,7 +69,7 @@ export const CurrencySelect = ({
         <Select.Positioner>
           <Select.Content>
             {currencyCollection.items.map((item) => (
-              <Select.Item item={item} key={item.value}>
+              <Select.Item item={item} key={item.value} data-testid={`currency-option-${item.value}`}>
                 {item.label}
                 <Select.ItemIndicator />
               </Select.Item>

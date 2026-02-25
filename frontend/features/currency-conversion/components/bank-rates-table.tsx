@@ -1,6 +1,6 @@
 "use client";
 
-import { Box, Spinner, Text } from "@chakra-ui/react";
+import { Box, Button, Spinner, Text } from "@chakra-ui/react";
 import { useCurrencyRatesQuery } from "../hooks/use-currency-rates.query";
 import { Currency } from "../types";
 
@@ -50,7 +50,7 @@ export const BankRatesTable = ({
         justifyContent="center"
         alignItems="center"
       >
-        <Spinner size="lg" />
+        <Spinner size="lg" data-testid="loading-spinner" />
       </Box>
     );
   }
@@ -64,17 +64,27 @@ export const BankRatesTable = ({
           borderRadius="md"
           border="1px solid"
           borderColor="red.200"
+          data-testid="error-message"
         >
-          <Text color="red.600" fontWeight="500">
-            Ошибка загрузки курсов банков
+          <Text color="red.600" fontWeight="500" mb={3}>
+            Failed to load exchange rates
           </Text>
+          <Button
+            size="sm"
+            colorScheme="red"
+            variant="outline"
+            onClick={() => window.location.reload()}
+            data-testid="retry-button"
+          >
+            Retry
+          </Button>
         </Box>
       </Box>
     );
   }
 
   return (
-    <Box w="100%" h="100%" py={4} display="flex" flexDirection="column">
+    <Box w="100%" h="100%" py={4} display="flex" flexDirection="column" data-testid="bank-rates-table">
       <Box mb={4}>
         <Text fontSize="xl" fontWeight="600" color="black" mb={2}>
           Курсы банков
@@ -204,11 +214,11 @@ export const BankRatesTable = ({
             </Box>
           ))
         ) : (
-          <Box py={8} textAlign="center" gridColumn="1 / -1">
+          <Box py={8} textAlign="center" gridColumn="1 / -1" data-testid="empty-rates-message">
             <Text color="gray.500" fontSize="md">
               {fromCurrency && toCurrency
-                ? `Курсы для пары ${fromCurrency.code}/${toCurrency.code} не найдены`
-                : "Выберите валютную пару для отображения курсов"}
+                ? `No exchange rates available for ${fromCurrency.code}/${toCurrency.code}`
+                : "No exchange rates available"}
             </Text>
           </Box>
         )}

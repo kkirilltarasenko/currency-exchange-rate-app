@@ -1,0 +1,31 @@
+{
+  "rates": [
+    {
+      "sellRate": 3.2,
+      "sellIso": "USD",
+      "buyRate": 3.1,
+      "buyIso": "BYN",
+      "quantity": 1,
+      "name": "USD/BYN",
+      "date": "2024-01-01T00:00:00Z"
+    },
+    {
+      "sellRate": 3.5,
+      "sellIso": "EUR",
+      "buyRate": 3.4,
+      "buyIso": "BYN",
+      "quantity": 1,
+      "name": "EUR/BYN",
+      "date": "2024-01-01T00:00:00Z"
+    },
+    {
+      "sellRate": 0.85,
+      "sellIso": "USD",
+      "buyRate": 0.84,
+      "buyIso": "EUR",
+      "quantity": 1,
+      "name": "USD/EUR",
+      "date": "2024-01-01T00:00:00Z"
+    }
+  ]
+}

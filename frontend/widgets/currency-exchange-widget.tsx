@@ -6,7 +6,6 @@ import { BankRatesTable } from "@/features/currency-conversion/components/bank-r
 import { useCurrencyConversion } from "@/features/currency-conversion/hooks/use-currency-conversion";
 
 export const CurrencyExchangeWidget = () => {
-  // Получаем выбранные валюты из хука
   const { fromCurrency, toCurrency } = useCurrencyConversion();
   
   

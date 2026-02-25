@@ -18,9 +18,6 @@ class AlfaBankService extends abstract_bank_module_1.AbstractBank {
             name: rate.name ?? `${rate.buyIso ?? ''}/${rate.sellIso ?? ''}`,
             date: rate.date ?? new Date().toISOString(),
         });
-        if (Array.isArray(apiResponse)) {
-            return apiResponse.map(mapRate);
-        }
         const typedRates = apiResponse;
         if (typedRates?.rates && Array.isArray(typedRates.rates)) {
             return typedRates.rates.map(mapRate);

@@ -21,6 +21,7 @@ export function MainLayout({ children }: MainLayoutProps) {
         border="1px solid"
         borderColor="gray.200"
         position="relative"
+        data-testid="main-layout"
       >
         <Sidebar />
         <Topbar />

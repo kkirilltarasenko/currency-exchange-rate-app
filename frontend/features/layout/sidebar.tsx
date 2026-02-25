@@ -20,17 +20,18 @@ export function Sidebar() {
       left={0}
       top={0}
       zIndex={10}
+      data-testid="sidebar"
     >
       <Box p={6} borderBottom="2px" borderColor="blue.400">
         <HStack gap={2}>
-          <CurrencyExchangeLogo size={48} />
-          <Text fontSize="lg" fontWeight="bold" color="gray.900">
+          <CurrencyExchangeLogo size={48} data-testid="logo" />
+          <Text fontSize="lg" fontWeight="bold" color="gray.900" data-testid="app-title">
             Currency Exchange
           </Text>
         </HStack>
       </Box>
       
-      <VStack align="start" gap={1} p={4}>
+      <VStack align="start" gap={1} p={4} data-testid="nav-links">
         {LINKS.map(({ title, path, icon }) => (
           <Box
             as={Link}
@@ -51,6 +52,8 @@ export function Sidebar() {
               bg: "blue.50",
               color: "blue.600",
             })}
+            data-testid={`nav-link-${path.replace('/', '')}`}
+            className={getIsActiveRoute(path) ? 'active' : ''}
           >
             <Icon as={icon} boxSize={4} />
             <Text fontSize="sm">{title}</Text>

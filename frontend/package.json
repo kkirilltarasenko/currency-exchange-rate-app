@@ -6,7 +6,12 @@
     "dev": "next dev -p 3001",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "cypress:open": "cypress open",
+    "cypress:run": "cypress run"
   },
   "dependencies": {
     "@chakra-ui/react": "^3.33.0",
@@ -20,11 +25,19 @@
     "styled-components": "^6.3.11"
   },
   "devDependencies": {
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.1.0",
+    "@testing-library/user-event": "^14.5.2",
+    "@types/cypress": "^1.1.6",
+    "@types/jest": "^30.0.0",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "cypress": "^15.10.0",
     "eslint": "^9",
     "eslint-config-next": "16.1.6",
+    "jest": "^30.0.0",
+    "jest-environment-jsdom": "^30.0.0",
     "prettier": "^3.8.1",
     "typescript": "^5"
   },

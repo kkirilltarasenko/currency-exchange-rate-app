@@ -84,7 +84,6 @@ export const useCurrencyConversion = () => {
   }, [getExchangeRate]);
 
   useEffect(() => {
-    // Не пересчитываем во время swap'а
     if (isSwapping) {
       return;
     }
@@ -104,7 +103,6 @@ export const useCurrencyConversion = () => {
 
 
   const swapCurrencies = useCallback(() => {
-    // Устанавливаем флаг swap'а для предотвращения пересчета
     setIsSwapping(true);
     
     const tempCurrency = fromCurrency;
@@ -115,10 +113,8 @@ export const useCurrencyConversion = () => {
     setFromAmount(toAmount);
     setToAmount(tempAmount);
     
-    // Меняем местами lastEditedField для корректного отображения
     setLastEditedField(lastEditedField === 'from' ? 'to' : 'from');
     
-    // Сбрасываем флаг swap'а после завершения
     setTimeout(() => {
       setIsSwapping(false);
     }, 0);

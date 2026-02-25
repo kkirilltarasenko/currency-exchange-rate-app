@@ -1,5 +1,5 @@
 const HistoryPage = () => {
-  return <div>Page</div>
+  return <div data-testid="history-page">History Page</div>
 }
 
 export default HistoryPage;
