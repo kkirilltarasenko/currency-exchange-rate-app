@@ -102,8 +102,8 @@ jobs:
         working-directory: frontend
         install: false
         build: pnpm run build
-        start: pnpm run start
-        wait-on: 'http://localhost:3000'
+        start: pnpm run dev
+        wait-on: 'http://localhost:3001'
         wait-on-timeout: 120
         browser: chrome
         record: false
@@ -157,7 +157,7 @@ jobs:
 
     - name: Start frontend
       run: |
-        pnpm run start &
+        pnpm run dev &
         sleep 10
       working-directory: ./frontend
 
