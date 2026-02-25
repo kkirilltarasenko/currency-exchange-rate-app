@@ -84,10 +84,23 @@ jobs:
       run: pnpm run test
       working-directory: ./frontend
 
+    - name: Cache Cypress binary
+      uses: actions/cache@v4
+      with:
+        path: ~/.cache/Cypress
+        key: cypress-${{ runner.os }}-${{ hashFiles('frontend/pnpm-lock.yaml') }}
+        restore-keys: |
+          cypress-${{ runner.os }}-
+
+    - name: Install Cypress binary
+      run: pnpm exec cypress install
+      working-directory: ./frontend
+
     - name: Run Cypress tests
       uses: cypress-io/github-action@v6
       with:
         working-directory: frontend
+        install: false
         build: pnpm run build
         start: pnpm run start
         wait-on: 'http://localhost:3000'
@@ -146,6 +159,18 @@ jobs:
       run: |
         pnpm run start &
         sleep 10
+      working-directory: ./frontend
+
+    - name: Cache Cypress binary for integration tests
+      uses: actions/cache@v4
+      with:
+        path: ~/.cache/Cypress
+        key: cypress-${{ runner.os }}-${{ hashFiles('frontend/pnpm-lock.yaml') }}
+        restore-keys: |
+          cypress-${{ runner.os }}-
+
+    - name: Install Cypress binary for integration tests
+      run: pnpm exec cypress install
       working-directory: ./frontend
 
     - name: Run integration tests
