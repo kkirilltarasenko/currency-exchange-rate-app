@@ -5,6 +5,7 @@ export const API_CONFIG = {
 export const API_ENDPOINTS = {
   HELLO: "/hello/world",
   ALFA_BANK_RATES: "/alfa-bank/rates",
+  BELARUS_BANK_RATES: "/belarusbank/rates",
 } as const;
 
 export const QUERY_KEYS = {

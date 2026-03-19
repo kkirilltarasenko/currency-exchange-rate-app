@@ -1,10 +1,10 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { AlfaBankController } from './alfa-bank.controller';
-import { AlfaBankService } from './alfa-bank.service';
+import { BelarusBankController } from './belarusbank.controller';
+import { BelarusBankService } from './belarusbank.service';
 
-describe('BelarusbankController', () => {
-  let controller: AlfaBankController;
-  let service: AlfaBankService;
+describe('BelarusBankController', () => {
+  let controller: BelarusBankController;
+  let service: BelarusBankService;
 
   const mockBankRatesResponse = {
     bankName: 'Альфа-Банк',
@@ -31,17 +31,17 @@ describe('BelarusbankController', () => {
     };
 
     const module: TestingModule = await Test.createTestingModule({
-      controllers: [AlfaBankController],
+      controllers: [BelarusBankController],
       providers: [
         {
-          provide: AlfaBankService,
+          provide: BelarusBankService,
           useValue: mockAlfaBankService,
         },
       ],
     }).compile();
 
-    controller = module.get<AlfaBankController>(AlfaBankController);
-    service = module.get<AlfaBankService>(AlfaBankService);
+    controller = module.get<BelarusBankController>(BelarusBankController);
+    service = module.get<BelarusBankService>(BelarusBankService);
   });
 
   it('should be defined', () => {

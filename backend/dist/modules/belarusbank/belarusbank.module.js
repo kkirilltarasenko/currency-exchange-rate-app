@@ -6,21 +6,17 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.HelloService = void 0;
+exports.BelarusBankModule = void 0;
 const common_1 = require("@nestjs/common");
-let HelloService = class HelloService {
-    getHello() {
-        return 'Hello from Hello Module!';
-    }
-    getHelloWorld() {
-        return {
-            message: 'Hello World from NestJS!',
-            timestamp: new Date().toISOString(),
-        };
-    }
+const belarusbank_controller_1 = require("./belarusbank.controller");
+const belarusbank_service_1 = require("./belarusbank.service");
+let BelarusBankModule = class BelarusBankModule {
 };
-exports.HelloService = HelloService;
-exports.HelloService = HelloService = __decorate([
-    (0, common_1.Injectable)()
-], HelloService);
-//# sourceMappingURL=hello.service.js.map
+exports.BelarusBankModule = BelarusBankModule;
+exports.BelarusBankModule = BelarusBankModule = __decorate([
+    (0, common_1.Module)({
+        controllers: [belarusbank_controller_1.BelarusBankController],
+        providers: [belarusbank_service_1.BelarusBankService],
+    })
+], BelarusBankModule);
+//# sourceMappingURL=belarusbank.module.js.map

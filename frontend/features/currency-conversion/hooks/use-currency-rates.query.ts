@@ -2,9 +2,24 @@ import { useQuery } from "@tanstack/react-query";
 
 import { ExchangeApi, QUERY_KEYS } from "@/api";
 
+const getRates = async () => {
+  const alfaBank = ExchangeApi.getAlfaBankRates();
+  const belarusBank = ExchangeApi.getBelarusBankRates();
+
+  const promises = await Promise.allSettled([alfaBank, belarusBank]);
+  console.log(promises);
+  return promises.map((p) => {
+    if (p.status === "fulfilled") {
+      return p.value;
+    } else {
+      return undefined;
+    }
+  });
+};
+
 export const useCurrencyRatesQuery = () => {
   return useQuery({
     queryKey: [QUERY_KEYS.ALFA_BANK_RATES],
-    queryFn: () => ExchangeApi.getAlfaBankRates(),
+    queryFn: getRates,
   });
 };

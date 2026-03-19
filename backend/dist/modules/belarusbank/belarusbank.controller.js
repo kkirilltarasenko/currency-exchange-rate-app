@@ -9,36 +9,27 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.HelloController = void 0;
+exports.BelarusBankController = void 0;
 const common_1 = require("@nestjs/common");
-const hello_service_1 = require("./hello.service");
-let HelloController = class HelloController {
-    helloService;
-    constructor(helloService) {
-        this.helloService = helloService;
+const belarusbank_service_1 = require("./belarusbank.service");
+let BelarusBankController = class BelarusBankController {
+    belarusBankService;
+    constructor(belarusBankService) {
+        this.belarusBankService = belarusBankService;
     }
-    getHello() {
-        return this.helloService.getHello();
-    }
-    getHelloWorld() {
-        return this.helloService.getHelloWorld();
+    getRates() {
+        return this.belarusBankService.getRates();
     }
 };
-exports.HelloController = HelloController;
+exports.BelarusBankController = BelarusBankController;
 __decorate([
-    (0, common_1.Get)(),
+    (0, common_1.Get)('rates'),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
-    __metadata("design:returntype", String)
-], HelloController.prototype, "getHello", null);
-__decorate([
-    (0, common_1.Get)('world'),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
-    __metadata("design:returntype", Object)
-], HelloController.prototype, "getHelloWorld", null);
-exports.HelloController = HelloController = __decorate([
-    (0, common_1.Controller)('hello'),
-    __metadata("design:paramtypes", [hello_service_1.HelloService])
-], HelloController);
-//# sourceMappingURL=hello.controller.js.map
+    __metadata("design:returntype", void 0)
+], BelarusBankController.prototype, "getRates", null);
+exports.BelarusBankController = BelarusBankController = __decorate([
+    (0, common_1.Controller)('belarusbank'),
+    __metadata("design:paramtypes", [belarusbank_service_1.BelarusBankService])
+], BelarusBankController);
+//# sourceMappingURL=belarusbank.controller.js.map

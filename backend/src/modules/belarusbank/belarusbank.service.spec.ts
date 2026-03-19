@@ -1,18 +1,18 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { AlfaBankService } from './alfa-bank.service';
+import { BelarusBankService } from './belarusbank.service';
 
 // Mock fetch globally
 global.fetch = jest.fn();
 
 describe('BelarusbankService', () => {
-  let service: AlfaBankService;
+  let service: BelarusBankService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [AlfaBankService],
+      providers: [BelarusBankService],
     }).compile();
 
-    service = module.get<AlfaBankService>(AlfaBankService);
+    service = module.get<BelarusBankService>(BelarusBankService);
     jest.clearAllMocks();
   });
 

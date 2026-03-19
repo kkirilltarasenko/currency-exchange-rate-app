@@ -15,30 +15,27 @@ export const BankRatesTable = ({
 }: BankRatesTableProps) => {
   const { data: bankData, isLoading, error } = useCurrencyRatesQuery();
   console.log(bankData, "DATA");
-  const filteredRates = bankData?.rates?.filter((rate) => {
-    if (!fromCurrency || !toCurrency) {
-      return true;
-    }
+  const filteredRates = bankData
+    ?.flatMap((bank) =>
+      bank.rates.map((rate) => ({
+        ...rate,
+        bankName: bank.bankName,
+        logoUrl: bank.logoUrl,
+      })),
+    )
+    ?.filter((rate) => {
+      if (!fromCurrency || !toCurrency) {
+        return true;
+      }
 
-    const isDirectPair =
-      rate.sellIso === fromCurrency.code && rate.buyIso === toCurrency.code;
+      const isDirectPair =
+        rate.sellIso === fromCurrency.code && rate.buyIso === toCurrency.code;
 
-    const isReversePair =
-      rate.sellIso === toCurrency.code && rate.buyIso === fromCurrency.code;
+      const isReversePair =
+        rate.sellIso === toCurrency.code && rate.buyIso === fromCurrency.code;
 
-    return isDirectPair || isReversePair;
-  });
-
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString("ru-RU", {
-      day: "2-digit",
-      month: "2-digit",
-      year: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
+      return isDirectPair || isReversePair;
     });
-  };
 
   if (isLoading) {
     return (
@@ -84,7 +81,14 @@ export const BankRatesTable = ({
   }
 
   return (
-    <Box w="100%" h="100%" py={4} display="flex" flexDirection="column" data-testid="bank-rates-table">
+    <Box
+      w="100%"
+      h="100%"
+      py={4}
+      display="flex"
+      flexDirection="column"
+      data-testid="bank-rates-table"
+    >
       <Box mb={4}>
         <Text fontSize="xl" fontWeight="600" color="black" mb={2}>
           Курсы банков
@@ -139,7 +143,7 @@ export const BankRatesTable = ({
             >
               <Box>
                 <Text fontWeight="500" color="black" fontSize="md">
-                  {bankData?.bankName}
+                  {rate.bankName}
                 </Text>
                 <Text fontSize="sm" color="gray.500">
                   {fromCurrency?.code}/{toCurrency?.code}
@@ -147,7 +151,7 @@ export const BankRatesTable = ({
               </Box>
 
               <Box display="flex" justifyContent="center" alignItems="center">
-                {bankData?.logoUrl ? (
+                {rate?.logoUrl ? (
                   <Box
                     w="40px"
                     h="40px"
@@ -157,8 +161,8 @@ export const BankRatesTable = ({
                     borderColor="gray.200"
                   >
                     <img
-                      src={bankData.logoUrl}
-                      alt={bankData.bankName}
+                      src={rate.logoUrl}
+                      alt={rate.bankName}
                       style={{
                         width: "100%",
                         height: "100%",
@@ -214,7 +218,12 @@ export const BankRatesTable = ({
             </Box>
           ))
         ) : (
-          <Box py={8} textAlign="center" gridColumn="1 / -1" data-testid="empty-rates-message">
+          <Box
+            py={8}
+            textAlign="center"
+            gridColumn="1 / -1"
+            data-testid="empty-rates-message"
+          >
             <Text color="gray.500" fontSize="md">
               {fromCurrency && toCurrency
                 ? `No exchange rates available for ${fromCurrency.code}/${toCurrency.code}`

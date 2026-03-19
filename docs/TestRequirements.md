@@ -3,6 +3,7 @@
 ## Обзор
 
 Данный документ описывает комплексную стратегию тестирования для приложения обмена валют, включающего:
+
 - **Backend**: NestJS API с модульной архитектурой
 - **Frontend**: Next.js приложение с React и feature-based архитектурой
 - **Contracts**: Общие типы TypeScript
@@ -10,11 +11,13 @@
 ## Инструменты тестирования
 
 ### Backend
+
 - **Jest** - Unit тесты
 - **Supertest** - Integration тесты для API endpoints
 - **@nestjs/testing** - Тестирование NestJS модулей
 
 ### Frontend
+
 - **Jest** - Unit тесты для функций и хуков
 - **React Testing Library** - Unit тесты для компонентов
 - **Cypress** - E2E тесты для пользовательских сценариев
@@ -24,6 +27,7 @@
 ### 1. Unit Tests (Jest)
 
 #### Покрытие:
+
 - **Services**: Бизнес-логика банковских сервисов
 - **Controllers**: HTTP endpoints и валидация
 - **Utils**: Вспомогательные функции
@@ -31,7 +35,8 @@
 
 #### Приоритетные компоненты для тестирования:
 
-**AlfaBankService**
+**BelarusbankService**
+
 ```typescript
 // Тесты для:
 - mapRates() - корректное преобразование API ответа
@@ -41,6 +46,7 @@
 ```
 
 **AppController**
+
 ```typescript
 // Тесты для:
 - GET /health - проверка статуса приложения
@@ -50,6 +56,7 @@
 ```
 
 **Logger Utility**
+
 ```typescript
 // Тесты для:
 - Форматирование сообщений
@@ -58,6 +65,7 @@
 ```
 
 #### Структура тестов:
+
 ```
 backend/src/
 ├── modules/
@@ -76,12 +84,14 @@ backend/src/
 ### 2. Integration Tests
 
 #### API Endpoints тестирование:
+
 - Полный цикл запрос-ответ
 - Валидация схем ответов
 - Обработка ошибок сети
 - Тестирование middleware
 
 ### 3. Метрики покрытия
+
 - **Минимальное покрытие**: 80%
 - **Критические компоненты**: 95%
 - **Исключения**: Конфигурационные файлы, типы
@@ -93,6 +103,7 @@ backend/src/
 #### Покрытие:
 
 **Hooks**
+
 ```typescript
 // use-currency-conversion.ts
 - getBestExchangeRate() - логика выбора лучшего курса
@@ -103,6 +114,7 @@ backend/src/
 ```
 
 **API Layer**
+
 ```typescript
 // exchange-api.ts
 - ExchangeApi.getAlfaBankRates() - HTTP запросы
@@ -111,6 +123,7 @@ backend/src/
 ```
 
 **Utility Functions**
+
 ```typescript
 // http-client.ts
 - HTTP клиент конфигурация
@@ -119,6 +132,7 @@ backend/src/
 ```
 
 **Components (Logic Testing)**
+
 ```typescript
 // Тестирование логики без UI:
 - CurrencyConverter - расчеты и валидация
@@ -127,6 +141,7 @@ backend/src/
 ```
 
 #### Структура unit тестов:
+
 ```
 frontend/
 ├── features/
@@ -151,6 +166,7 @@ frontend/
 #### Пользовательские сценарии:
 
 **Основной флоу конвертации валют**
+
 ```typescript
 describe('Currency Conversion Flow', () => {
   it('should convert USD to BYN successfully', () => {
@@ -164,6 +180,7 @@ describe('Currency Conversion Flow', () => {
 ```
 
 **Навигация и UI**
+
 ```typescript
 describe('Application Navigation', () => {
   it('should navigate between pages correctly', () => {
@@ -175,6 +192,7 @@ describe('Application Navigation', () => {
 ```
 
 **Обработка ошибок**
+
 ```typescript
 describe('Error Handling', () => {
   it('should handle API errors gracefully', () => {
@@ -186,6 +204,7 @@ describe('Error Handling', () => {
 ```
 
 **Responsive Design**
+
 ```typescript
 describe('Responsive Design', () => {
   it('should work on mobile devices', () => {
@@ -196,6 +215,7 @@ describe('Responsive Design', () => {
 ```
 
 #### Структура E2E тестов:
+
 ```
 cypress/
 ├── e2e/
@@ -216,6 +236,7 @@ cypress/
 ## Конфигурация тестирования
 
 ### Backend Jest Configuration
+
 ```json
 {
   "moduleFileExtensions": ["js", "json", "ts"],
@@ -244,6 +265,7 @@ cypress/
 ```
 
 ### Frontend Jest Configuration
+
 ```json
 {
   "testEnvironment": "jsdom",
@@ -270,6 +292,7 @@ cypress/
 ```
 
 ### Cypress Configuration
+
 ```json
 {
   "baseUrl": "http://localhost:3001",
@@ -286,6 +309,7 @@ cypress/
 ## Моки и фикстуры
 
 ### Backend Mocks
+
 ```typescript
 // Мок для внешних API
 const mockAlfaBankResponse = {
@@ -304,6 +328,7 @@ const mockAlfaBankResponse = {
 ```
 
 ### Frontend Mocks
+
 ```typescript
 // Мок для React Query
 const mockQueryClient = new QueryClient({
@@ -324,6 +349,7 @@ jest.mock('../api/exchange-api', () => ({
 ## CI/CD Integration
 
 ### GitHub Actions Workflow
+
 ```yaml
 name: Tests
 on: [push, pull_request]
@@ -351,16 +377,19 @@ jobs:
 ## Метрики и отчетность
 
 ### Покрытие кода
+
 - **Backend**: Минимум 80% для всех метрик
 - **Frontend**: Минимум 75% для всех метрик
 - **Критические функции**: 95% покрытие
 
 ### Производительность тестов
+
 - **Unit тесты**: < 30 секунд
 - **E2E тесты**: < 5 минут
 - **Полный набор**: < 10 минут
 
 ### Отчеты
+
 - HTML отчеты покрытия
 - JUnit XML для CI/CD
 - Скриншоты и видео для E2E тестов
@@ -368,24 +397,28 @@ jobs:
 ## Этапы внедрения
 
 ### Фаза 1: Backend Unit Tests
+
 1. Настройка Jest конфигурации
-2. Тесты для AlfaBankService
+2. Тесты для BelarusbankService
 3. Тесты для контроллеров
 4. Тесты для утилит
 
 ### Фаза 2: Frontend Unit Tests
+
 1. Настройка Jest + RTL
 2. Тесты для хуков
 3. Тесты для API слоя
 4. Тесты для компонентов
 
 ### Фаза 3: E2E Tests
+
 1. Настройка Cypress
 2. Основные пользовательские сценарии
 3. Тесты обработки ошибок
 4. Responsive тесты
 
 ### Фаза 4: CI/CD Integration
+
 1. GitHub Actions настройка
 2. Автоматические отчеты
 3. Quality gates
@@ -394,16 +427,19 @@ jobs:
 ## Поддержка и развитие
 
 ### Code Review Guidelines
+
 - Все новые функции должны иметь тесты
 - Покрытие не должно снижаться
 - Тесты должны быть читаемыми и поддерживаемыми
 
 ### Обновление тестов
+
 - Регулярный рефакторинг тестов
 - Обновление моков при изменении API
 - Добавление новых тест-кейсов для багов
 
 ### Документация
+
 - Комментарии в сложных тестах
 - README для каждого типа тестов
 - Примеры написания тестов
