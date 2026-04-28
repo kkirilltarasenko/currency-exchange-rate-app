@@ -21,17 +21,16 @@ class BelarusBankService extends abstract_bank_module_1.AbstractBank {
     };
     mapRates(apiResponse) {
         const mapRate = (rate) => ({
-            sellRate: rate.sellRate ?? 0,
+            sellRate: rate.buyRate ?? 0,
             sellIso: rate.sellIso ?? '',
             sellCode: rate.sellCode ?? 0,
-            buyRate: rate.buyRate ?? 0,
+            buyRate: rate.sellRate ?? 0,
             buyIso: rate.buyIso ?? '',
             buyCode: rate.buyCode ?? 0,
             quantity: rate.quantity ?? 1,
             name: rate.name ?? `${rate.buyIso ?? ''}/${rate.sellIso ?? ''}`,
             date: rate.date ?? new Date().toISOString(),
         });
-        console.log(apiResponse.length, 'LEN');
         const typedRates = apiResponse
             .map((arg) => this.transformRates(arg))
             .filter((arg) => typeof arg !== 'undefined');

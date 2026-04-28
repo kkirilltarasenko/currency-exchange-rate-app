@@ -18,14 +18,14 @@ export class AlfaBankService extends AbstractBank {
     'https://ibapi.alfabank.by:8273/partner/1.0.1/public/rates';
   protected bankName = 'Альфа-Банк';
   protected logoUrl =
-    'https://png.klev.club/uploads/posts/2024-04/png-klev-club-i9fp-p-logotip-alfa-bank-png-12.png';
+    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTvlw4eZKJr4z3kggLUqL-zZ4Bdx9MXge1_vQ&s';
 
   protected mapRates(apiResponse: unknown): BankRate[] {
     const mapRate = (rate: AlfaBankApiRate): BankRate => ({
-      sellRate: rate.sellRate ?? 0,
+      sellRate: rate.buyRate ?? 0,
       sellIso: rate.sellIso ?? '',
       sellCode: rate.sellCode ?? 0,
-      buyRate: rate.buyRate ?? 0,
+      buyRate: rate.sellRate ?? 0,
       buyIso: rate.buyIso ?? '',
       buyCode: rate.buyCode ?? 0,
       quantity: rate.quantity ?? 1,

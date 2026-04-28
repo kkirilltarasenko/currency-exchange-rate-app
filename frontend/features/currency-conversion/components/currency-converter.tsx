@@ -37,20 +37,20 @@ export const CurrencyConverter = () => {
   };
 
   return (
-    <Box w="100%" py={4} data-testid="currency-converter">
-      <Stack gap={4}>
+    <Box w="100%" py={2} data-testid="currency-converter">
+      <Stack gap={3}>
         <Box>
-          <Text fontSize="xl" fontWeight="600" color="black" mb={1}>
+          <Text fontSize="lg" fontWeight="600" color="black" mb={1}>
             Конвертер валют
           </Text>
-          <Text fontSize="sm" color="gray.600">
+          <Text fontSize="xs" color="gray.600">
             Введите сумму в любое поле для автоматической конвертации
           </Text>
         </Box>
 
-        <Stack gap={3}>
+        <Stack gap={2}>
           <Box>
-            <Text mb={2} fontSize="sm" fontWeight="500" color="gray.700">
+            <Text mb={1} fontSize="xs" fontWeight="500" color="gray.700">
               Отдам
             </Text>
             <Stack direction="row" gap={2} align="center">
@@ -60,7 +60,7 @@ export const CurrencyConverter = () => {
                   value={fromAmount || ''}
                   onChange={handleFromAmountChange}
                   placeholder="0.00"
-                  size="md"
+                  size="sm"
                   min="0"
                   step="0.01"
                   border="1px solid"
@@ -70,11 +70,11 @@ export const CurrencyConverter = () => {
                     borderColor: "blue.500",
                     boxShadow: "0 0 0 1px #3182CE"
                   }}
-                  fontSize="md"
+                  fontSize="sm"
                   data-testid="amount-input-from"
                 />
               </Box>
-              <Box minW="100px">
+              <Box minW="80px">
                 <CurrencySelect
                   currencies={currencies}
                   selectedCurrency={fromCurrency}
@@ -88,12 +88,12 @@ export const CurrencyConverter = () => {
             </Stack>
           </Box>
 
-          <Box display="flex" justifyContent="center" mt={4} mb={-2}>
+          <Box display="flex" justifyContent="center" my={1}>
             <Button
               onClick={handleSwap}
               variant="outline"
-              size="sm"
-              p={2}
+              size="xs"
+              p={1}
               borderRadius="full"
               border="1px solid"
               borderColor="gray.300"
@@ -106,12 +106,12 @@ export const CurrencyConverter = () => {
               transition="all 0.2s"
               data-testid="swap-currencies-button"
             >
-              <FaExchangeAlt size={14} />
+              <FaExchangeAlt size={12} />
             </Button>
           </Box>
 
           <Box>
-            <Text mb={2} fontSize="sm" fontWeight="500" color="gray.700">
+            <Text mb={1} fontSize="xs" fontWeight="500" color="gray.700">
               Получу
             </Text>
             <Stack direction="row" gap={2} align="center">
@@ -121,7 +121,7 @@ export const CurrencyConverter = () => {
                   value={toAmount || ''}
                   onChange={handleToAmountChange}
                   placeholder="0.00"
-                  size="md"
+                  size="sm"
                   min="0"
                   step="0.01"
                   border="1px solid"
@@ -131,11 +131,11 @@ export const CurrencyConverter = () => {
                     borderColor: "green.500",
                     boxShadow: "0 0 0 1px #38A169"
                   }}
-                  fontSize="md"
+                  fontSize="sm"
                   data-testid="amount-input-to"
                 />
               </Box>
-              <Box minW="100px">
+              <Box minW="80px">
                 <CurrencySelect
                   currencies={currencies}
                   selectedCurrency={toCurrency}
@@ -151,18 +151,18 @@ export const CurrencyConverter = () => {
 
           {fromAmount > 0 && toAmount > 0 && (
             <Box
-              p={3}
+              p={2}
               bg="blue.50"
-              borderRadius="8px"
+              borderRadius="6px"
               border="1px solid"
               borderColor="blue.200"
               textAlign="center"
               data-testid="exchange-rate-display"
             >
-              <Text fontSize="sm" color="blue.800" fontWeight="500">
+              <Text fontSize="xs" color="blue.800" fontWeight="500">
                 1 {fromCurrency.code} = {getExchangeRate(fromCurrency, toCurrency).toFixed(4)} {toCurrency.code}
               </Text>
-              <Text fontSize="xs" color="blue.600" mt={1}>
+              <Text fontSize="2xs" color="blue.600" mt={0.5}>
                 💰 Лучший курс из банковских данных
               </Text>
             </Box>

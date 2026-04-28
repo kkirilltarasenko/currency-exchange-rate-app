@@ -53,9 +53,9 @@ export const useCurrencyConversion = () => {
         let currentRate = 0;
 
         if (rate.sellIso === from.code && rate.buyIso === to.code) {
-          currentRate = rate.sellRate / rate.quantity;
+          currentRate = rate.buyRate / rate.quantity;
         } else if (rate.sellIso === to.code && rate.buyIso === from.code) {
-          currentRate = rate.quantity / rate.buyRate;
+          currentRate = rate.quantity / rate.sellRate;
         }
 
         if (currentRate > bestRate) {

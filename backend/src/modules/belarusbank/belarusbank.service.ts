@@ -1,6 +1,18 @@
 import { AbstractBank } from '../../common/decorators/abstract-bank.module';
 import { BankRate } from '../../common/dto/bank.dto';
 
+interface BelarusBankApiRate {
+  sellRate?: number;
+  sellIso?: string;
+  sellCode?: number;
+  buyRate?: number;
+  buyIso?: string;
+  buyCode?: number;
+  quantity?: number;
+  name?: string;
+  date?: string;
+}
+
 export class BelarusBankService extends AbstractBank {
   protected apiUrl = 'https://belarusbank.by/api/kursExchange?city=Минск';
   protected bankName = 'Беларусбанк';
@@ -22,11 +34,11 @@ export class BelarusBankService extends AbstractBank {
   };
 
   protected mapRates(apiResponse: unknown): BankRate[] {
-    const mapRate = (rate: any): BankRate => ({
-      sellRate: rate.sellRate ?? 0,
+    const mapRate = (rate: BelarusBankApiRate): BankRate => ({
+      sellRate: rate.buyRate ?? 0,
       sellIso: rate.sellIso ?? '',
       sellCode: rate.sellCode ?? 0,
-      buyRate: rate.buyRate ?? 0,
+      buyRate: rate.sellRate ?? 0,
       buyIso: rate.buyIso ?? '',
       buyCode: rate.buyCode ?? 0,
       quantity: rate.quantity ?? 1,
@@ -34,7 +46,6 @@ export class BelarusBankService extends AbstractBank {
       date: rate.date ?? new Date().toISOString(),
     });
 
-    console.log((apiResponse as any[]).length, 'LEN');
     const typedRates = (apiResponse as any[])
       .map((arg) => this.transformRates(arg))
       .filter((arg) => typeof arg !== 'undefined');
@@ -73,3 +84,4 @@ export class BelarusBankService extends AbstractBank {
     };
   }
 }
+

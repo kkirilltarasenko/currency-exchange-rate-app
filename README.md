@@ -67,7 +67,45 @@ pnpm dev
 ```bash
 cd backend
 npm run start:dev
-# API будет доступно по адресу: http://localhost:3000
+# API будет доступно по адресу: http://localhost:3002
+```
+
+#### Быстрый запуск с Makefile
+
+Для удобства разработки добавлен [`Makefile`](Makefile) с командами для одновременного запуска backend и frontend:
+
+```bash
+# Установка всех зависимостей
+make install
+
+# Запуск обоих сервисов одновременно
+make dev
+# Backend: http://localhost:3002
+# Frontend: http://localhost:3001
+
+# Запуск только backend
+make dev-backend
+
+# Запуск только frontend
+make dev-frontend
+
+# Сборка обоих проектов
+make build
+
+# Запуск тестов
+make test
+
+# Линтинг кода
+make lint
+
+# Остановка всех процессов
+make stop
+
+# Очистка зависимостей и артефактов сборки
+make clean
+
+# Показать все доступные команды
+make help
 ```
 
 #### Продакшен
@@ -220,7 +258,7 @@ vercel --prod
 docker build -t currency-app .
 
 # Запуск контейнера
-docker run -p 3001:3001 -p 3000:3000 currency-app
+docker run -p 3001:3001 -p 3002:3002 currency-app
 ```
 
 ### Docker Compose
@@ -240,7 +278,7 @@ services:
   backend:
     build: ./backend
     ports:
-      - "3000:3000"
+      - "3002:3002"
     environment:
       - NODE_ENV=production
 ```

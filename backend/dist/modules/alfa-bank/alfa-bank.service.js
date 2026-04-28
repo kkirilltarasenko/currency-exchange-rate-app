@@ -5,13 +5,13 @@ const abstract_bank_module_1 = require("../../common/decorators/abstract-bank.mo
 class AlfaBankService extends abstract_bank_module_1.AbstractBank {
     apiUrl = 'https://ibapi.alfabank.by:8273/partner/1.0.1/public/rates';
     bankName = 'Альфа-Банк';
-    logoUrl = 'https://png.klev.club/uploads/posts/2024-04/png-klev-club-i9fp-p-logotip-alfa-bank-png-12.png';
+    logoUrl = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTvlw4eZKJr4z3kggLUqL-zZ4Bdx9MXge1_vQ&s';
     mapRates(apiResponse) {
         const mapRate = (rate) => ({
-            sellRate: rate.sellRate ?? 0,
+            sellRate: rate.buyRate ?? 0,
             sellIso: rate.sellIso ?? '',
             sellCode: rate.sellCode ?? 0,
-            buyRate: rate.buyRate ?? 0,
+            buyRate: rate.sellRate ?? 0,
             buyIso: rate.buyIso ?? '',
             buyCode: rate.buyCode ?? 0,
             quantity: rate.quantity ?? 1,
