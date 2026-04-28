@@ -32,7 +32,7 @@ export function Sidebar() {
       </Box>
       
       <VStack align="start" gap={1} p={4} data-testid="nav-links">
-        {LINKS.map(({ title, path, icon }) => (
+        {LINKS.map(({ title, path, icon, disabled }) => !disabled && (
           <Box
             as={Link}
             /* eslint-disable-next-line @typescript-eslint/ban-ts-comment */

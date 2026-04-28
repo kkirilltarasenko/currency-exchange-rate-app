@@ -14,20 +14,24 @@ export const LINKS = [
     title: "Главная",
     path: Routes.HOME,
     icon: FiHome,
+    disabled: false,
   },
   {
     title: "Валютные Курсы",
     path: Routes.RATES,
     icon: FiTrendingUp,
+    disabled: true,
   },
   {
     title: "История",
     path: Routes.HISTORY,
     icon: FiBarChart,
+    disabled: true,
   },
   {
     title: "Настройки",
     path: Routes.SETTINGS,
     icon: FiSettings,
+    disabled: false,
   }
 ] as const

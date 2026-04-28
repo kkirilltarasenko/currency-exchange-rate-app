@@ -57,12 +57,12 @@ export const CurrencyConverter = () => {
               <Box flex="1">
                 <Input
                   type="number"
-                  value={fromAmount || ''}
+                  value={fromAmount ? Number(fromAmount.toFixed(4)) : ''}
                   onChange={handleFromAmountChange}
                   placeholder="0.00"
                   size="sm"
                   min="0"
-                  step="0.01"
+                  step="0.0001"
                   border="1px solid"
                   borderColor="blue.300"
                   bg="blue.50"
@@ -118,12 +118,12 @@ export const CurrencyConverter = () => {
               <Box flex="1">
                 <Input
                   type="number"
-                  value={toAmount || ''}
+                  value={toAmount ? Number(toAmount.toFixed(4)) : ''}
                   onChange={handleToAmountChange}
                   placeholder="0.00"
                   size="sm"
                   min="0"
-                  step="0.01"
+                  step="0.0001"
                   border="1px solid"
                   borderColor="green.300"
                   bg="green.50"

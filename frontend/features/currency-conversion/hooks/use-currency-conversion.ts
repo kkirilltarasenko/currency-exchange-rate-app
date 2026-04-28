@@ -52,12 +52,22 @@ export const useCurrencyConversion = () => {
       relevantRates.forEach((rate) => {
         let currentRate = 0;
 
+        // Для пары USD/BYN в таблице банков:
+        // - sellIso = "USD", buyIso = "BYN"
+        // - buyRate = курс покупки USD (банк покупает USD за BYN)
+        // - sellRate = курс продажи USD (банк продает USD за BYN)
+
         if (rate.sellIso === from.code && rate.buyIso === to.code) {
+          // Конвертируем USD → BYN: используем buyRate (банк покупает USD)
           currentRate = rate.buyRate / rate.quantity;
         } else if (rate.sellIso === to.code && rate.buyIso === from.code) {
+          // Конвертируем BYN → USD: используем sellRate (банк продает USD)
+          // 1 USD стоит sellRate BYN, значит 1 BYN = 1/sellRate USD
           currentRate = rate.quantity / rate.sellRate;
         }
 
+        // Для USD→BYN ищем максимальный курс покупки (больше BYN за USD)
+        // Для BYN→USD ищем максимальный курс (больше USD за BYN, что означает минимальный sellRate)
         if (currentRate > bestRate) {
           bestRate = currentRate;
         }
