@@ -1,0 +1,53 @@
+import { Controller, Get, Put, Post, Body } from '@nestjs/common';
+import { SettingsService, AppSettings } from './settings.service';
+
+interface GetSettingsResponse {
+  success: true;
+  data: AppSettings;
+}
+
+interface UpdateSettingsRequest {
+  settings: Partial<AppSettings>;
+}
+
+interface UpdateSettingsResponse {
+  success: true;
+  data: AppSettings;
+}
+
+interface ResetSettingsResponse {
+  success: true;
+  data: AppSettings;
+}
+
+@Controller('settings')
+export class SettingsController {
+  constructor(private readonly settingsService: SettingsService) {}
+
+  @Get()
+  async getSettings(): Promise<GetSettingsResponse> {
+    const settings = await this.settingsService.getSettings();
+    return {
+      success: true,
+      data: settings,
+    };
+  }
+
+  @Put()
+  async updateSettings(@Body() request: UpdateSettingsRequest): Promise<UpdateSettingsResponse> {
+    const updatedSettings = await this.settingsService.updateSettings(request.settings);
+    return {
+      success: true,
+      data: updatedSettings,
+    };
+  }
+
+  @Post('reset')
+  async resetSettings(): Promise<ResetSettingsResponse> {
+    const defaultSettings = await this.settingsService.resetSettings();
+    return {
+      success: true,
+      data: defaultSettings,
+    };
+  }
+}

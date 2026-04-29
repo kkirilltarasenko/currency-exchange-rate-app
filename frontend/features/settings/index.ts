@@ -1,7 +1,10 @@
 export { useSettings } from './hooks/use-settings';
+export { useSettingsQuery, useUpdateSettingsMutation, useResetSettingsMutation } from './hooks/use-settings-query';
 export { AppearanceSettings } from './components/appearance-settings';
 export { CurrencySettings } from './components/currency-settings';
 export { NotificationsSettings } from './components/notifications-settings';
 export { SettingsManagement } from './components/settings-management';
+export { ServerStatus } from './components/server-status';
+export { SettingsProvider, useSettingsContext } from './context/settings-provider';
 export type { AppSettings } from './types';
 export { DEFAULT_SETTINGS, SUPPORTED_LANGUAGES, SUPPORTED_CURRENCIES } from './types';

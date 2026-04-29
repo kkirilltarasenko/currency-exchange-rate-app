@@ -14,6 +14,7 @@ const alfa_bank_1 = require("./modules/alfa-bank");
 const belarusbank_1 = require("./modules/belarusbank");
 const belagroprombank_1 = require("./modules/belagroprombank");
 const dabrabyt_bank_1 = require("./modules/dabrabyt-bank");
+const settings_1 = require("./modules/settings");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -24,6 +25,7 @@ exports.AppModule = AppModule = __decorate([
             belarusbank_1.BelarusBankModule,
             belagroprombank_1.BelagropromBankModule,
             dabrabyt_bank_1.DabrabytBankModule,
+            settings_1.SettingsModule,
         ],
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService],

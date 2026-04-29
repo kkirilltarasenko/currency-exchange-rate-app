@@ -18,8 +18,8 @@ export const CurrencySelect = ({
   currencies,
   selectedCurrency,
   onCurrencyChange,
-  borderColor = "gray.300",
-  bg = "white",
+  borderColor = "border",
+  bg = "bg",
   focusBorderColor = "blue.500",
   placeholder = "Выберите валюту",
   testId

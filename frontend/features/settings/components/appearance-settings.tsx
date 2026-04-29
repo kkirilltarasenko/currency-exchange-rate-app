@@ -90,7 +90,7 @@ export function AppearanceSettings({ settings, onUpdateSetting }: AppearanceSett
   ];
 
   return (
-    <Card.Root w="100%" flex="1">
+    <Card.Root w="100%">
       <Card.Header pb={3}>
         <Heading size="sm">Внешний вид</Heading>
       </Card.Header>
@@ -109,8 +109,8 @@ export function AppearanceSettings({ settings, onUpdateSetting }: AppearanceSett
                     p={2}
                     borderRadius="md"
                     border="2px solid"
-                    borderColor={isSelected ? "blue.500" : "gray.200"}
-                    bg={isSelected ? "blue.50" : "white"}
+                    borderColor={isSelected ? "blue.500" : "border"}
+                    bg={isSelected ? "blue.subtle" : "bg"}
                     cursor="pointer"
                     onClick={() => handleThemeChange(option.value as AppSettings['theme'])}
                     transition="all 0.2s"
@@ -141,51 +141,13 @@ export function AppearanceSettings({ settings, onUpdateSetting }: AppearanceSett
             <HStack justify="space-between" align="center">
               <VStack align="start" gap={0} flex="1">
                 <Text fontWeight="medium" fontSize="sm">Показывать логотипы банков</Text>
-                <Text fontSize="xs" color="gray.600">
+                <Text fontSize="xs" color="fg.muted">
                   Отображение логотипов в списке банков
                 </Text>
               </VStack>
               <Checkbox.Root
                 checked={settings.showBankLogos}
                 onCheckedChange={(e) => onUpdateSetting('showBankLogos', Boolean(e.checked))}
-                size="sm"
-              >
-                <Checkbox.HiddenInput />
-                <Checkbox.Control>
-                  <Checkbox.Indicator />
-                </Checkbox.Control>
-              </Checkbox.Root>
-            </HStack>
-
-            <HStack justify="space-between" align="center">
-              <VStack align="start" gap={0} flex="1">
-                <Text fontWeight="medium" fontSize="sm">Компактный режим</Text>
-                <Text fontSize="xs" color="gray.600">
-                  Уменьшенные отступы и размеры элементов
-                </Text>
-              </VStack>
-              <Checkbox.Root
-                checked={settings.compactMode}
-                onCheckedChange={(e) => onUpdateSetting('compactMode', Boolean(e.checked))}
-                size="sm"
-              >
-                <Checkbox.HiddenInput />
-                <Checkbox.Control>
-                  <Checkbox.Indicator />
-                </Checkbox.Control>
-              </Checkbox.Root>
-            </HStack>
-
-            <HStack justify="space-between" align="center">
-              <VStack align="start" gap={0} flex="1">
-                <Text fontWeight="medium" fontSize="sm">Анимации</Text>
-                <Text fontSize="xs" color="gray.600">
-                  Плавные переходы и анимации интерфейса
-                </Text>
-              </VStack>
-              <Checkbox.Root
-                checked={settings.animationsEnabled}
-                onCheckedChange={(e) => onUpdateSetting('animationsEnabled', Boolean(e.checked))}
                 size="sm"
               >
                 <Checkbox.HiddenInput />

@@ -1,8 +1,9 @@
 "use client";
 
-import React, { createContext, useContext, useCallback, useEffect, useState, ReactNode } from "react";
+import React, { createContext, useContext, useCallback, useEffect, useState, ReactNode, useMemo } from "react";
 import { ConversionResult, Currency } from "../types";
 import { useCurrencyRatesQuery } from "../hooks/use-currency-rates.query";
+import { useAppSettings } from "../../../shared/hooks/use-app-settings";
 
 const CURRENCIES: Currency[] = [
   { code: "USD", name: "US Dollar", symbol: "$" },
@@ -28,15 +29,27 @@ interface CurrencyConversionContextType {
   getExchangeRate: (from: Currency, to: Currency) => number;
 }
 
-const CurrencyConversionContext = createContext<CurrencyConversionContextType | undefined>(undefined);
+export const CurrencyConversionContext = createContext<CurrencyConversionContextType | undefined>(undefined);
 
 interface CurrencyConversionProviderProps {
   children: ReactNode;
 }
 
 export const CurrencyConversionProvider = ({ children }: CurrencyConversionProviderProps) => {
-  const [fromCurrency, setFromCurrency] = useState<Currency>(CURRENCIES[0]);
-  const [toCurrency, setToCurrency] = useState<Currency>(CURRENCIES[1]);
+  const { defaultBaseCurrency, defaultTargetCurrency } = useAppSettings();
+  
+  // Мемоизируем валюты по умолчанию из настроек
+  const defaultFromCurrency = useMemo(() => {
+    return CURRENCIES.find(c => c.code === defaultBaseCurrency) || CURRENCIES[0];
+  }, [defaultBaseCurrency]);
+  
+  const defaultToCurrency = useMemo(() => {
+    return CURRENCIES.find(c => c.code === defaultTargetCurrency) || CURRENCIES[1];
+  }, [defaultTargetCurrency]);
+
+  // Используем функцию инициализации для useState
+  const [fromCurrency, setFromCurrency] = useState<Currency>(() => defaultFromCurrency);
+  const [toCurrency, setToCurrency] = useState<Currency>(() => defaultToCurrency);
   const [fromAmount, setFromAmount] = useState<number>(1);
   const [toAmount, setToAmount] = useState<number>(0);
   const [isLoading, setIsLoading] = useState(false);
@@ -44,6 +57,14 @@ export const CurrencyConversionProvider = ({ children }: CurrencyConversionProvi
   const [isSwapping, setIsSwapping] = useState(false);
 
   const { data: bankData, isLoading: isLoadingRates } = useCurrencyRatesQuery();
+
+  // Синхронизируем валюты с настройками при их изменении
+  if (fromCurrency.code !== defaultFromCurrency.code) {
+    setFromCurrency(defaultFromCurrency);
+  }
+  if (toCurrency.code !== defaultToCurrency.code) {
+    setToCurrency(defaultToCurrency);
+  }
 
   const getBestExchangeRate = useCallback(
     (from: Currency, to: Currency): number => {

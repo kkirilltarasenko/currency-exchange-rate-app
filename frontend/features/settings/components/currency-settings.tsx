@@ -118,29 +118,40 @@ function RefreshIntervalSelect({
 
 export function CurrencySettings({ settings, onUpdateSetting }: CurrencySettingsProps) {
   return (
-    <Card.Root w="100%" flex="1">
+    <Card.Root w="100%">
       <Card.Header pb={3}>
         <Heading size="sm">Настройки валют</Heading>
       </Card.Header>
       <Card.Body pt={0}>
         <VStack gap={4} align="stretch">
           {/* Валюты по умолчанию */}
-          <HStack gap={4} align="end">
-            <Box flex="1">
-              <CurrencySelect
-                value={settings.defaultBaseCurrency}
-                onChange={(value) => onUpdateSetting('defaultBaseCurrency', value)}
-                label="Базовая валюта"
-              />
-            </Box>
-            <Box flex="1">
-              <CurrencySelect
-                value={settings.defaultTargetCurrency}
-                onChange={(value) => onUpdateSetting('defaultTargetCurrency', value)}
-                label="Целевая валюта"
-              />
-            </Box>
-          </HStack>
+          <Box>
+            <Text fontSize="xs" color="fg.muted" mb={3}>
+              Эти валюты будут выбраны по умолчанию в конвертере
+            </Text>
+            <HStack gap={4} align="end">
+              <Box flex="1">
+                <CurrencySelect
+                  value={settings.defaultBaseCurrency}
+                  onChange={(value) => {
+                    console.log('Changing base currency to:', value);
+                    onUpdateSetting('defaultBaseCurrency', value);
+                  }}
+                  label="Базовая валюта (отдаю)"
+                />
+              </Box>
+              <Box flex="1">
+                <CurrencySelect
+                  value={settings.defaultTargetCurrency}
+                  onChange={(value) => {
+                    console.log('Changing target currency to:', value);
+                    onUpdateSetting('defaultTargetCurrency', value);
+                  }}
+                  label="Целевая валюта (получаю)"
+                />
+              </Box>
+            </HStack>
+          </Box>
 
           {/* Точность отображения */}
           <Box>
@@ -153,7 +164,7 @@ export function CurrencySettings({ settings, onUpdateSetting }: CurrencySettings
               max={8}
               size="sm"
             />
-            <Text fontSize="xs" color="gray.600" mt={1}>
+            <Text fontSize="xs" color="fg.muted" mt={1}>
               От 0 до 8 знаков после запятой
             </Text>
           </Box>
@@ -166,8 +177,8 @@ export function CurrencySettings({ settings, onUpdateSetting }: CurrencySettings
                 p={2}
                 borderRadius="md"
                 border="2px solid"
-                borderColor={settings.numberFormat === 'standard' ? "blue.500" : "gray.200"}
-                bg={settings.numberFormat === 'standard' ? "blue.50" : "white"}
+                borderColor={settings.numberFormat === 'standard' ? "blue.500" : "border"}
+                bg={settings.numberFormat === 'standard' ? "blue.subtle" : "bg"}
                 cursor="pointer"
                 onClick={() => onUpdateSetting('numberFormat', 'standard')}
                 transition="all 0.2s"
@@ -176,14 +187,14 @@ export function CurrencySettings({ settings, onUpdateSetting }: CurrencySettings
                 flex="1"
               >
                 <Text fontWeight="medium" fontSize="sm">Стандартный</Text>
-                <Text fontSize="xs" color="gray.600">1,234.56</Text>
+                <Text fontSize="xs" color="fg.muted">1,234.56</Text>
               </Box>
               <Box
                 p={2}
                 borderRadius="md"
                 border="2px solid"
-                borderColor={settings.numberFormat === 'compact' ? "blue.500" : "gray.200"}
-                bg={settings.numberFormat === 'compact' ? "blue.50" : "white"}
+                borderColor={settings.numberFormat === 'compact' ? "blue.500" : "border"}
+                bg={settings.numberFormat === 'compact' ? "blue.subtle" : "bg"}
                 cursor="pointer"
                 onClick={() => onUpdateSetting('numberFormat', 'compact')}
                 transition="all 0.2s"
@@ -192,7 +203,7 @@ export function CurrencySettings({ settings, onUpdateSetting }: CurrencySettings
                 flex="1"
               >
                 <Text fontWeight="medium" fontSize="sm">Компактный</Text>
-                <Text fontSize="xs" color="gray.600">1.23K</Text>
+                <Text fontSize="xs" color="fg.muted">1.23K</Text>
               </Box>
             </HStack>
           </Box>
@@ -202,7 +213,7 @@ export function CurrencySettings({ settings, onUpdateSetting }: CurrencySettings
             <HStack justify="space-between" align="center">
               <VStack align="start" gap={0} flex="1">
                 <Text fontWeight="medium" fontSize="sm">Автообновление курсов</Text>
-                <Text fontSize="xs" color="gray.600">
+                <Text fontSize="xs" color="fg.muted">
                   Автоматическое обновление данных о курсах валют
                 </Text>
               </VStack>

@@ -4,6 +4,7 @@ import { Box, Button, Input, Stack, Text } from "@chakra-ui/react";
 import { FaExchangeAlt } from "react-icons/fa";
 import { useCurrencyConversionContext } from "../context/currency-conversion.context";
 import { CurrencySelect } from "./currency-select";
+import { useAppSettings } from "../../../shared/hooks/use-app-settings";
 
 export const CurrencyConverter = () => {
   const {
@@ -20,6 +21,19 @@ export const CurrencyConverter = () => {
     getExchangeRate,
   } = useCurrencyConversionContext();
 
+  const { decimalPlaces, numberFormat, animationsEnabled } = useAppSettings();
+
+
+  // Функция для форматирования чисел согласно настройкам
+  const formatNumber = (value: number): string => {
+    if (numberFormat === 'compact' && value >= 1000) {
+      return new Intl.NumberFormat('ru-RU', {
+        notation: 'compact',
+        maximumFractionDigits: decimalPlaces,
+      }).format(value);
+    }
+    return value.toFixed(decimalPlaces);
+  };
 
   const handleFromAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = parseFloat(e.target.value) || 0;
@@ -40,32 +54,32 @@ export const CurrencyConverter = () => {
     <Box w="100%" py={2} data-testid="currency-converter">
       <Stack gap={3}>
         <Box>
-          <Text fontSize="lg" fontWeight="600" color="black" mb={1}>
+          <Text fontSize="lg" fontWeight="600" color="fg" mb={1}>
             Конвертер валют
           </Text>
-          <Text fontSize="xs" color="gray.600">
+          <Text fontSize="xs" color="fg.muted">
             Введите сумму в любое поле для автоматической конвертации
           </Text>
         </Box>
 
         <Stack gap={2}>
           <Box>
-            <Text mb={1} fontSize="xs" fontWeight="500" color="gray.700">
+            <Text mb={1} fontSize="xs" fontWeight="500" color="fg">
               Отдам
             </Text>
             <Stack direction="row" gap={2} align="center">
               <Box flex="1">
                 <Input
                   type="number"
-                  value={fromAmount ? Number(fromAmount.toFixed(4)) : ''}
+                  value={fromAmount ? Number(fromAmount.toFixed(decimalPlaces)) : ''}
                   onChange={handleFromAmountChange}
                   placeholder="0.00"
                   size="sm"
                   min="0"
-                  step="0.0001"
+                  step={`0.${'0'.repeat(decimalPlaces - 1)}1`}
                   border="1px solid"
                   borderColor="blue.300"
-                  bg="blue.50"
+                  bg="blue.subtle"
                   _focus={{
                     borderColor: "blue.500",
                     boxShadow: "0 0 0 1px #3182CE"
@@ -79,9 +93,6 @@ export const CurrencyConverter = () => {
                   currencies={currencies}
                   selectedCurrency={fromCurrency}
                   onCurrencyChange={setFromCurrency}
-                  borderColor="blue.300"
-                  bg="blue.50"
-                  focusBorderColor="blue.500"
                   testId="currency-select-from"
                 />
               </Box>
@@ -96,11 +107,11 @@ export const CurrencyConverter = () => {
               p={1}
               borderRadius="full"
               border="1px solid"
-              borderColor="gray.300"
-              bg="white"
+              borderColor="border"
+              bg="bg"
               _hover={{
-                bg: "gray.50",
-                borderColor: "gray.400",
+                bg: "bg.subtle",
+                borderColor: "border.emphasized",
                 transform: "rotate(180deg)"
               }}
               transition="all 0.2s"
@@ -111,7 +122,7 @@ export const CurrencyConverter = () => {
           </Box>
 
           <Box>
-            <Text mb={1} fontSize="xs" fontWeight="500" color="gray.700">
+            <Text mb={1} fontSize="xs" fontWeight="500" color="fg">
               Получу
             </Text>
             <Stack direction="row" gap={2} align="center">
@@ -126,7 +137,7 @@ export const CurrencyConverter = () => {
                   step="0.0001"
                   border="1px solid"
                   borderColor="green.300"
-                  bg="green.50"
+                  bg="green.subtle"
                   _focus={{
                     borderColor: "green.500",
                     boxShadow: "0 0 0 1px #38A169"
@@ -140,9 +151,6 @@ export const CurrencyConverter = () => {
                   currencies={currencies}
                   selectedCurrency={toCurrency}
                   onCurrencyChange={setToCurrency}
-                  borderColor="green.300"
-                  bg="green.50"
-                  focusBorderColor="green.500"
                   testId="currency-select-to"
                 />
               </Box>
@@ -152,17 +160,17 @@ export const CurrencyConverter = () => {
           {fromAmount > 0 && toAmount > 0 && (
             <Box
               p={2}
-              bg="blue.50"
+              bg="blue.subtle"
               borderRadius="6px"
               border="1px solid"
               borderColor="blue.200"
               textAlign="center"
               data-testid="exchange-rate-display"
             >
-              <Text fontSize="xs" color="blue.800" fontWeight="500">
+              <Text fontSize="xs" color="blue.fg" fontWeight="500">
                 1 {fromCurrency.code} = {getExchangeRate(fromCurrency, toCurrency).toFixed(4)} {toCurrency.code}
               </Text>
-              <Text fontSize="2xs" color="blue.600" mt={0.5}>
+              <Text fontSize="2xs" color="blue.fg" mt={0.5}>
                 💰 Лучший курс из банковских данных
               </Text>
             </Box>

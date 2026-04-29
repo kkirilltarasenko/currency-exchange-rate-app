@@ -11,23 +11,39 @@ import {
   Center,
 } from "@chakra-ui/react";
 import { LuPalette, LuCoins, LuBell, LuSettings } from "react-icons/lu";
+import { useSearchParams, useRouter } from "next/navigation";
+import { useCallback } from "react";
 import {
-  useSettings,
   AppearanceSettings,
   CurrencySettings,
   NotificationsSettings,
   SettingsManagement,
 } from "../../features/settings";
+import { ServerStatus } from "../../features/settings/components/server-status";
+import { useSettingsContext } from "../../features/settings/context/settings-provider";
 
 const SettingsPage = () => {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const currentTab = searchParams.get('tab') || 'appearance';
+
   const {
     settings,
     isLoading,
+    error,
     updateSetting,
     resetSettings,
     exportSettings,
     importSettings,
-  } = useSettings();
+    isUpdating,
+    isResetting,
+  } = useSettingsContext();
+
+  const handleTabChange = useCallback((details: { value: string }) => {
+    const params = new URLSearchParams(searchParams);
+    params.set('tab', details.value);
+    router.push(`/settings?${params.toString()}`, { scroll: false });
+  }, [searchParams, router]);
 
   if (isLoading) {
     return (
@@ -64,17 +80,6 @@ const SettingsPage = () => {
       ),
     },
     {
-      value: "notifications",
-      label: "Уведомления",
-      icon: LuBell,
-      content: (
-        <NotificationsSettings
-          settings={settings}
-          onUpdateSetting={updateSetting}
-        />
-      ),
-    },
-    {
       value: "management",
       label: "Управление",
       icon: LuSettings,
@@ -90,9 +95,9 @@ const SettingsPage = () => {
   ];
 
   return (
-    <Box w="100%" h="100%" p={4} data-testid="settings-page">
-      <VStack gap={4} align="stretch" h="100%">
-        <Box textAlign="center" flexShrink={0}>
+    <Box w="100%" h="100%" data-testid="settings-page">
+      <VStack gap={4} align="stretch" h="100%" minH="0">
+        <Box textAlign="left" flexShrink={0}>
           <Heading size="md" mb={1}>
             Настройки приложения
           </Heading>
@@ -101,7 +106,18 @@ const SettingsPage = () => {
           </Text>
         </Box>
 
-        <Tabs.Root defaultValue="appearance" variant="enclosed" flex="1" display="flex" flexDirection="column">
+        {/* Статус сервера */}
+        <ServerStatus />
+
+        <Tabs.Root
+          value={currentTab}
+          onValueChange={handleTabChange}
+          variant="enclosed"
+          flex="1"
+          display="flex"
+          flexDirection="column"
+          minHeight="0"
+        >
           <Tabs.List flexShrink={0}>
             {tabItems.map((tab) => {
               const Icon = tab.icon;
@@ -123,8 +139,11 @@ const SettingsPage = () => {
               overflow="auto"
               display="flex"
               flexDirection="column"
+              minHeight="0"
             >
-              {tab.content}
+              <Box flex="1" overflow="auto">
+                {tab.content}
+              </Box>
             </Tabs.Content>
           ))}
         </Tabs.Root>

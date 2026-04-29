@@ -58,22 +58,22 @@ export function SettingsManagement({
   };
 
   return (
-    <Card.Root w="100%" flex="1">
+    <Card.Root w="100%">
       <Card.Header pb={3}>
         <Heading size="sm">Управление настройками</Heading>
       </Card.Header>
       <Card.Body pt={0} pb={4}>
-        <VStack gap={4} align="stretch">
+        <VStack gap={4} align="stretch" >
           <Box>
-            <Text fontSize="sm" color="gray.700" mb={2}>
+            <Text fontSize="sm" color="fg" mb={2}>
               Управление конфигурацией приложения
             </Text>
-            <Text fontSize="xs" color="gray.600">
+            <Text fontSize="xs" color="fg.muted">
               Экспортируйте настройки для резервного копирования, импортируйте ранее сохраненные настройки или сбросьте все к значениям по умолчанию.
             </Text>
           </Box>
 
-          <VStack gap={3} align="stretch">
+          <HStack gap={1} align="stretch">
             {/* Экспорт настроек */}
             <Box>
               <Button
@@ -122,16 +122,16 @@ export function SettingsManagement({
                 Сбросить к настройкам по умолчанию
               </Button>
             </Box>
-          </VStack>
+          </HStack>
 
           {/* Информация о текущих настройках */}
           <Box
             p={3}
             mb={2}
-            bg="gray.50"
+            bg="bg.subtle"
             borderRadius="md"
             border="1px solid"
-            borderColor="gray.200"
+            borderColor="border"
           >
             <HStack mb={2}>
               <LuFileText size={14} />
@@ -143,8 +143,8 @@ export function SettingsManagement({
               <VStack gap={2} align="stretch">
                 {/* Внешний вид */}
                 <Box>
-                  <Text fontWeight="semibold" color="blue.700" mb={1}>🎨 Внешний вид</Text>
-                  <VStack gap={0.5} align="start" color="gray.600">
+                  <Text fontWeight="semibold" color="blue.fg" mb={1}>🎨 Внешний вид</Text>
+                  <VStack gap={0.5} align="start" color="fg.muted">
                     <Text>Тема: {settings.theme === 'light' ? '☀️ Светлая' : settings.theme === 'dark' ? '🌙 Темная' : '🖥️ Системная'}</Text>
                     <Text>Язык: {settings.language === 'ru' ? '🇷🇺 RU' : settings.language === 'en' ? '🇺🇸 EN' : '🇧🇾 BE'}</Text>
                     <Text>Логотипы: {settings.showBankLogos ? '✅' : '❌'}</Text>
@@ -155,8 +155,8 @@ export function SettingsManagement({
 
                 {/* Валютные настройки */}
                 <Box>
-                  <Text fontWeight="semibold" color="green.700" mb={1}>💱 Валюты</Text>
-                  <VStack gap={0.5} align="start" color="gray.600">
+                  <Text fontWeight="semibold" color="green.fg" mb={1}>💱 Валюты</Text>
+                  <VStack gap={0.5} align="start" color="fg.muted">
                     <Text>Базовая: {settings.defaultBaseCurrency}</Text>
                     <Text>Целевая: {settings.defaultTargetCurrency}</Text>
                     <Text>Знаков: {settings.decimalPlaces}</Text>
@@ -170,8 +170,8 @@ export function SettingsManagement({
               <VStack gap={2} align="stretch">
                 {/* Уведомления */}
                 <Box>
-                  <Text fontWeight="semibold" color="orange.700" mb={1}>🔔 Уведомления</Text>
-                  <VStack gap={0.5} align="start" color="gray.600">
+                  <Text fontWeight="semibold" color="orange.fg" mb={1}>🔔 Уведомления</Text>
+                  <VStack gap={0.5} align="start" color="fg.muted">
                     <Text>Уведомления: {settings.notifications ? '✅' : '❌'}</Text>
                     <Text>Звук: {settings.soundEnabled ? '🔊' : '🔇'}</Text>
                     <Text>Банков: {settings.favoriteBanks.length}/{AVAILABLE_BANKS.length}</Text>
@@ -181,8 +181,8 @@ export function SettingsManagement({
 
                 {/* Системная информация */}
                 <Box>
-                  <Text fontWeight="semibold" color="purple.700" mb={1}>⚙️ Система</Text>
-                  <VStack gap={0.5} align="start" color="gray.600">
+                  <Text fontWeight="semibold" color="purple.fg" mb={1}>⚙️ Система</Text>
+                  <VStack gap={0.5} align="start" color="fg.muted">
                     <Text>Версия: 1.0</Text>
                     <Text>Дата: {new Date().toLocaleDateString('ru-RU')}</Text>
                     <Text>Размер: {Math.round(JSON.stringify(settings).length / 1024)}KB</Text>
@@ -191,20 +191,6 @@ export function SettingsManagement({
                 </Box>
               </VStack>
             </SimpleGrid>
-
-            {/* Избранные банки отдельно если есть */}
-            {settings.favoriteBanks.length > 0 && (
-              <Box mt={2} pt={2} borderTop="1px solid" borderColor="gray.200">
-                <Text fontWeight="semibold" fontSize="2xs" color="gray.700" mb={1}>
-                  Избранные банки:
-                </Text>
-                <Text fontSize="2xs" color="gray.600">
-                  {settings.favoriteBanks.map(id =>
-                    AVAILABLE_BANKS.find(bank => bank.id === id)?.name || id
-                  ).join(', ')}
-                </Text>
-              </Box>
-            )}
           </Box>
         </VStack>
       </Card.Body>

@@ -1,9 +1,12 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import "./settings-styles.css";
 import { Provider } from "@/components/ui/provider";
 import { MainLayout } from "@/features/layout/main-layout";
 import { QueryClientProvider } from "@/global/query-client.provider";
+import { SettingsProvider } from "@/features/settings/context/settings-provider";
+import { SettingsSyncIndicator } from "@/features/settings/components/settings-sync-indicator";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -31,11 +34,14 @@ export default function RootLayout({
         suppressHydrationWarning
       >
         <Provider>
-          <MainLayout>
-            <QueryClientProvider>
-              {children}
-            </QueryClientProvider>
-          </MainLayout>
+          <QueryClientProvider>
+            <SettingsProvider>
+              <MainLayout>
+                {children}
+              </MainLayout>
+              <SettingsSyncIndicator />
+            </SettingsProvider>
+          </QueryClientProvider>
         </Provider>
       </body>
     </html>

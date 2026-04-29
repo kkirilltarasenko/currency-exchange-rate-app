@@ -11,9 +11,9 @@ export function Topbar() {
     <Box
       w="calc(100% - 280px)"
       h="70px"
-      bg="white"
+      bg="bg"
       borderBottom="1px solid"
-      borderColor="gray.200"
+      borderColor="border"
       position="absolute"
       top={0}
       left="280px"
@@ -23,7 +23,7 @@ export function Topbar() {
     >
       <Flex h="full" align="center" justify="space-between">
         <Box>
-          <Text fontSize="xl" fontWeight="bold" color="gray.900">
+          <Text fontSize="xl" fontWeight="bold" color="fg">
             {getPageTitle()}
           </Text>
         </Box>

@@ -8,6 +8,7 @@ export const API_ENDPOINTS = {
   BELARUS_BANK_RATES: "/belarusbank/rates",
   BELAGROPROMBANK_RATES: "/belagroprombank/rates",
   DABRABYT_BANK_RATES: "/dabrabyt-bank/rates",
+  SETTINGS: "/settings",
 } as const;
 
 export const QUERY_KEYS = {
@@ -16,4 +17,5 @@ export const QUERY_KEYS = {
   BELARUS_BANK_RATES: "BELARUS_BANK_RATES",
   BELAGROPROMBANK_RATES: "BELAGROPROMBANK_RATES",
   DABRABYT_BANK_RATES: "DABRABYT_BANK_RATES",
+  SETTINGS: "SETTINGS",
 } as const;

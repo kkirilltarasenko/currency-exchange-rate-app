@@ -12,10 +12,10 @@ export const CurrencyExchangeWidget = () => {
         w="100%"
         h="100%"
         p={7}
-        bg="white"
+        bg="bg"
         borderRadius="12px"
         border="1px solid"
-        borderColor="gray.200"
+        borderColor="border"
         boxShadow="0 1px 3px 0 rgba(0, 0, 0, 0.1)"
       >
         <Grid
@@ -25,9 +25,9 @@ export const CurrencyExchangeWidget = () => {
         >
           <GridItem>
             <Box
-              borderRight={{ base: "none", lg: "1px solid #c8c8c8" }}
+              borderRight={{ base: "none", lg: "1px solid" }}
               borderBottom={{ base: "1px solid", lg: "none" }}
-              borderColor="gray.100"
+              borderColor="border"
               pr={{ base: 0, lg: 6 }}
               pb={{ base: 6, lg: 0 }}
               h="100%"

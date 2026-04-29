@@ -14,12 +14,12 @@ export function MainLayout({ children }: MainLayoutProps) {
       <Box
         w="85vw"
         h="85vh"
-        bg="white"
+        bg="bg"
         borderRadius="xl"
         overflow="hidden"
         boxShadow="2xl"
         border="1px solid"
-        borderColor="gray.200"
+        borderColor="border"
         position="relative"
         data-testid="main-layout"
       >
@@ -31,10 +31,8 @@ export function MainLayout({ children }: MainLayoutProps) {
           mt="70px"
           p={3}
           h="calc(100% - 70px)"
-          display="flex"
-          alignItems="center"
-          justifyContent="center"
-          bg="gray.50"
+          overflow="auto"
+          bg="bg.subtle"
         >
           {children}
         </Box>

@@ -8,6 +8,7 @@ export * from './common.types';
 export * from './hello.types';
 export * from './exchange.types';
 export * from './health.types';
+export * from './settings.types';
 
 // Re-export commonly used types for convenience
 export type {
@@ -41,3 +42,12 @@ export type {
   DetailedHealthCheckResponse,
   ServiceStatus,
 } from './health.types';
+
+export type {
+  AppSettings,
+  GetSettingsResponse,
+  UpdateSettingsRequest,
+  UpdateSettingsResponse,
+  ResetSettingsResponse,
+  DEFAULT_SETTINGS,
+} from './settings.types';

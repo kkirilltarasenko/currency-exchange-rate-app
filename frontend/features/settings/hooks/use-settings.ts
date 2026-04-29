@@ -1,39 +1,37 @@
-"use client"
+"use client";
 
-import { useState, useEffect, useCallback } from 'react';
+import { useCallback } from 'react';
 import { AppSettings, DEFAULT_SETTINGS } from '../types';
+import {
+  useSettingsQuery,
+  useUpdateSettingsMutation,
+  useResetSettingsMutation
+} from './use-settings-query';
 
 const SETTINGS_STORAGE_KEY = 'currency-exchange-settings';
 
 export function useSettings() {
-  const [settings, setSettings] = useState<AppSettings>(DEFAULT_SETTINGS);
-  const [isLoading, setIsLoading] = useState(true);
+  const { data: settings = DEFAULT_SETTINGS, isLoading, error } = useSettingsQuery();
+  const updateSettingsMutation = useUpdateSettingsMutation();
+  const resetSettingsMutation = useResetSettingsMutation();
 
-  // Загрузка настроек из localStorage при инициализации
-  useEffect(() => {
+  // Сохранение настроек (сначала на сервер, потом в localStorage как резерв)
+  const saveSettings = useCallback(async (newSettings: AppSettings) => {
     try {
-      const savedSettings = localStorage.getItem(SETTINGS_STORAGE_KEY);
-      if (savedSettings) {
-        const parsedSettings = JSON.parse(savedSettings);
-        // Объединяем с дефолтными настройками для обратной совместимости
-        setSettings({ ...DEFAULT_SETTINGS, ...parsedSettings });
-      }
-    } catch (error) {
-      console.error('Ошибка загрузки настроек:', error);
-    } finally {
-      setIsLoading(false);
-    }
-  }, []);
-
-  // Сохранение настроек в localStorage
-  const saveSettings = useCallback((newSettings: AppSettings) => {
-    try {
+      // Пытаемся сохранить на сервер
+      await updateSettingsMutation.mutateAsync(newSettings);
+      // Если успешно, сохраняем в localStorage как резерв
       localStorage.setItem(SETTINGS_STORAGE_KEY, JSON.stringify(newSettings));
-      setSettings(newSettings);
     } catch (error) {
-      console.error('Ошибка сохранения настроек:', error);
+      console.error('Ошибка сохранения настроек на сервер:', error);
+      // Если сервер недоступен, сохраняем только в localStorage
+      try {
+        localStorage.setItem(SETTINGS_STORAGE_KEY, JSON.stringify(newSettings));
+      } catch (localError) {
+        console.error('Ошибка сохранения настроек в localStorage:', localError);
+      }
     }
-  }, []);
+  }, [updateSettingsMutation]);
 
   // Обновление отдельного параметра
   const updateSetting = useCallback(<K extends keyof AppSettings>(
@@ -45,9 +43,16 @@ export function useSettings() {
   }, [settings, saveSettings]);
 
   // Сброс настроек к дефолтным
-  const resetSettings = useCallback(() => {
-    saveSettings(DEFAULT_SETTINGS);
-  }, [saveSettings]);
+  const resetSettings = useCallback(async () => {
+    try {
+      await resetSettingsMutation.mutateAsync();
+      localStorage.removeItem(SETTINGS_STORAGE_KEY);
+    } catch (error) {
+      console.error('Ошибка сброса настроек:', error);
+      // Если сервер недоступен, сбрасываем локально
+      localStorage.removeItem(SETTINGS_STORAGE_KEY);
+    }
+  }, [resetSettingsMutation]);
 
   // Экспорт настроек
   const exportSettings = useCallback(() => {
@@ -85,11 +90,15 @@ export function useSettings() {
 
   return {
     settings,
-    isLoading,
+    isLoading: isLoading || updateSettingsMutation.isPending || resetSettingsMutation.isPending,
+    error,
     updateSetting,
     saveSettings,
     resetSettings,
     exportSettings,
     importSettings,
+    // Дополнительные состояния для UI
+    isUpdating: updateSettingsMutation.isPending,
+    isResetting: resetSettingsMutation.isPending,
   };
 }

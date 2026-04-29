@@ -1,0 +1,250 @@
+/* Стили для применения настроек */
+
+/* Компактный режим */
+.compact-mode {
+  --chakra-space-2: 0.25rem;
+  --chakra-space-3: 0.5rem;
+  --chakra-space-4: 0.75rem;
+  --chakra-space-6: 1rem;
+  --chakra-space-8: 1.25rem;
+}
+
+.compact-mode .chakra-card {
+  padding: var(--chakra-space-3);
+}
+
+.compact-mode .chakra-heading {
+  font-size: 0.9em;
+  margin-bottom: var(--chakra-space-2);
+}
+
+.compact-mode .chakra-text {
+  font-size: 0.85em;
+  line-height: 1.3;
+}
+
+.compact-mode .chakra-button {
+  padding: var(--chakra-space-2) var(--chakra-space-3);
+  font-size: 0.85em;
+}
+
+.compact-mode .chakra-input {
+  padding: var(--chakra-space-2);
+  font-size: 0.85em;
+}
+
+/* Отключение анимаций */
+.no-animations * {
+  animation-duration: 0ms !important;
+  animation-delay: 0ms !important;
+  transition-duration: 0ms !important;
+  transition-delay: 0ms !important;
+}
+
+/* Темная тема */
+.dark {
+  color-scheme: dark;
+}
+
+.dark body {
+  background-color: #0f0f0f;
+  color: #e2e8f0;
+}
+
+/* Основные компоненты */
+.dark .chakra-card,
+.dark [data-part="root"] {
+  background-color: #1a1a1a !important;
+  border-color: #333333 !important;
+}
+
+.dark .chakra-input,
+.dark input {
+  background-color: #1a1a1a !important;
+  border-color: #333333 !important;
+  color: #e2e8f0 !important;
+}
+
+.dark .chakra-select,
+.dark select,
+.dark [data-part="trigger"],
+.dark [data-part="content"],
+.dark [data-part="item"] {
+  background-color: #1a1a1a !important;
+  border-color: #333333 !important;
+  color: #e2e8f0 !important;
+}
+
+.dark .chakra-button {
+  background-color: #1a1a1a !important;
+  border-color: #333333 !important;
+  color: #e2e8f0 !important;
+}
+
+.dark .chakra-button:hover {
+  background-color: #2a2a2a !important;
+}
+
+/* Агрессивное переопределение всех белых фонов */
+.dark * {
+  border-color: #4a5568 !important;
+}
+
+.dark *[style*="background-color: white"],
+.dark *[style*="background-color: rgb(255, 255, 255)"],
+.dark *[style*="background: white"],
+.dark *[style*="background: rgb(255, 255, 255)"],
+.dark *[style*="background-color: #ffffff"],
+.dark *[style*="background: #ffffff"] {
+  background-color: #1a1a1a !important;
+}
+
+.dark *[style*="background-color: #f7fafc"],
+.dark *[style*="background-color: rgb(247, 250, 252)"],
+.dark *[style*="background-color: #f9fafb"],
+.dark *[style*="background-color: rgb(249, 250, 251)"] {
+  background-color: #2a2a2a !important;
+}
+
+/* Переопределение цветов текста */
+.dark *[style*="color: black"],
+.dark *[style*="color: rgb(0, 0, 0)"],
+.dark *[style*="color: #000000"],
+.dark *[style*="color: #1a202c"] {
+  color: #e2e8f0 !important;
+}
+
+/* Специфичные стили для компонентов валют */
+.dark [data-testid="currency-converter"],
+.dark [data-testid="bank-rates-table"] {
+  background-color: transparent !important;
+}
+
+/* Переопределение всех Box компонентов с белым фоном */
+.dark .chakra-box {
+  background-color: transparent !important;
+}
+
+.dark .chakra-box[style*="background-color: white"],
+.dark .chakra-box[style*="background: white"] {
+  background-color: #1a1a1a !important;
+}
+
+/* Переопределение Grid и GridItem */
+.dark .chakra-grid,
+.dark .chakra-grid-item {
+  background-color: transparent !important;
+}
+
+/* Специальные правила для Select компонентов */
+.dark [role="combobox"],
+.dark [role="listbox"],
+.dark [role="option"] {
+  background-color: #1a1a1a !important;
+  border-color: #333333 !important;
+  color: #e2e8f0 !important;
+}
+
+/* Переопределение всех элементов с data-part атрибутами */
+.dark [data-part] {
+  background-color: #1a1a1a !important;
+  border-color: #333333 !important;
+}
+
+.dark [data-part="trigger"]:focus,
+.dark [data-part="trigger"]:hover {
+  background-color: #2a2a2a !important;
+}
+
+/* Светлая тема */
+.light {
+  color-scheme: light;
+}
+
+.light body {
+  background-color: #ffffff;
+  color: #1a202c;
+}
+
+.light .chakra-card {
+  background-color: #ffffff;
+  border-color: #e2e8f0;
+}
+
+.light .chakra-input {
+  background-color: #ffffff;
+  border-color: #e2e8f0;
+  color: #1a202c;
+}
+
+.light .chakra-select {
+  background-color: #ffffff;
+  border-color: #e2e8f0;
+  color: #1a202c;
+}
+
+.light .chakra-button {
+  background-color: #ffffff;
+  border-color: #e2e8f0;
+  color: #1a202c;
+}
+
+.light .chakra-button:hover {
+  background-color: #f7fafc;
+}
+
+/* Настройки для разных языков */
+[lang="ru"] {
+  font-family: "Geist Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+[lang="en"] {
+  font-family: "Geist Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+[lang="be"] {
+  font-family: "Geist Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+/* Адаптивные настройки для мобильных устройств */
+@media (max-width: 768px) {
+  .compact-mode {
+    --chakra-space-2: 0.125rem;
+    --chakra-space-3: 0.25rem;
+    --chakra-space-4: 0.5rem;
+    --chakra-space-6: 0.75rem;
+    --chakra-space-8: 1rem;
+  }
+}
+
+/* Настройки для печати */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* Настройки для пользователей с ограниченными возможностями */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Высокий контраст */
+@media (prefers-contrast: high) {
+  .chakra-card {
+    border-width: 2px;
+  }
+  
+  .chakra-button {
+    border-width: 2px;
+  }
+}

@@ -50,9 +50,9 @@ export const DEFAULT_SETTINGS: AppSettings = {
 };
 
 export const SUPPORTED_LANGUAGES = [
-  { code: 'ru', name: 'Русский', flag: '🇷🇺' },
-  { code: 'en', name: 'English', flag: '🇺🇸' },
-  { code: 'be', name: 'Беларуская', flag: '🇧🇾' },
+  { code: 'ru', name: 'Русский', flag: '' },
+  { code: 'en', name: 'English', flag: '' },
+  { code: 'be', name: 'Беларуская', flag: '' },
 ] as const;
 
 export const SUPPORTED_CURRENCIES = [
@@ -73,8 +73,8 @@ export const REFRESH_INTERVALS = [
 ] as const;
 
 export const AVAILABLE_BANKS = [
-  { id: 'belarusbank', name: 'Беларусбанк' },
-  { id: 'alfabank', name: 'Альфа-Банк' },
-  { id: 'belagroprombank', name: 'Белагропромбанк' },
-  { id: 'dabrabyt', name: 'Дабрабыт' },
+  { id: 'беларусбанк', name: 'Беларусбанк' },
+  { id: 'альфа-банк', name: 'Альфа-Банк' },
+  { id: 'белагропромбанк', name: 'Белагропромбанк' },
+  { id: 'дабрабыт', name: 'Дабрабыт' },
 ] as const;

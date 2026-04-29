@@ -13,9 +13,9 @@ export function Sidebar() {
     <Box
       w="280px"
       h="100%"
-      bg="white"
+      bg="bg"
       borderRight="1px solid"
-      borderColor="gray.200"
+      borderColor="border"
       position="absolute"
       left={0}
       top={0}
@@ -25,7 +25,7 @@ export function Sidebar() {
       <Box p={6} borderBottom="2px" borderColor="blue.400">
         <HStack gap={2}>
           <CurrencyExchangeLogo size={48} data-testid="logo" />
-          <Text fontSize="lg" fontWeight="bold" color="gray.900" data-testid="app-title">
+          <Text fontSize="lg" fontWeight="bold" color="fg" data-testid="app-title">
             Currency Exchange
           </Text>
         </HStack>
@@ -45,12 +45,13 @@ export function Sidebar() {
             p={3}
             borderRadius="lg"
             cursor="pointer"
-            _hover={{ bg: "blue.50", color: "blue.600" }}
+            color="fg.muted"
+            _hover={{ bg: "blue.subtle", color: "blue.fg" }}
             w="full"
             fontWeight="medium"
             {...(getIsActiveRoute(path) && {
-              bg: "blue.50",
-              color: "blue.600",
+              bg: "blue.subtle",
+              color: "blue.fg",
             })}
             data-testid={`nav-link-${path.replace('/', '')}`}
             className={getIsActiveRoute(path) ? 'active' : ''}

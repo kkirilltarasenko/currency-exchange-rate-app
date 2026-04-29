@@ -3,6 +3,8 @@
 import { Box, Button, Spinner, Text } from "@chakra-ui/react";
 import { useCurrencyRatesQuery } from "../hooks/use-currency-rates.query";
 import { useCurrencyConversionContext } from "../context/currency-conversion.context";
+import { useAppSettings } from "../../../shared/hooks/use-app-settings";
+import { useNumberFormatter } from "../../../shared/utils/number-formatter";
 
 // Функция для форматирования даты в формат "28 апреля 2026"
 const formatDateToRussian = (dateString: string): string => {
@@ -39,9 +41,23 @@ const formatDateToRussian = (dateString: string): string => {
   }
 };
 
+// Функция для генерации ID банка из названия
+const generateBankId = (bankName: string): string => {
+  return bankName?.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '') || '';
+};
+
 export const BankRatesTable = () => {
   const { fromCurrency, toCurrency } = useCurrencyConversionContext();
   const { data: bankData, isLoading, error } = useCurrencyRatesQuery();
+  const {
+    settings,
+    favoriteBanks,
+    showBankLogos,
+    animationsEnabled,
+    language
+  } = useAppSettings();
+  const formatter = useNumberFormatter(settings);
+  
   console.log(bankData, "DATA");
   const filteredRates = bankData
     ?.flatMap((bank) =>
@@ -49,9 +65,11 @@ export const BankRatesTable = () => {
         ...rate,
         bankName: bank?.bankName,
         logoUrl: bank?.logoUrl,
+        bankId: generateBankId(bank?.bankName || ''),
       })) || [],
     )
     ?.filter((rate) => {
+      // Фильтр по валютной паре
       if (!fromCurrency || !toCurrency) {
         return true;
       }
@@ -62,7 +80,26 @@ export const BankRatesTable = () => {
       const isReversePair =
         rate.sellIso === toCurrency.code && rate.buyIso === fromCurrency.code;
 
-      return isDirectPair || isReversePair;
+      const matchesCurrencyPair = isDirectPair || isReversePair;
+
+      // Фильтр по избранным банкам (если есть избранные)
+      if (favoriteBanks.length > 0) {
+        const isFavoriteBank = favoriteBanks.includes(rate.bankId || rate.bankName);
+        return matchesCurrencyPair && isFavoriteBank;
+      }
+
+      return matchesCurrencyPair;
+    })
+    ?.sort((a, b) => {
+      // Сортировка: избранные банки сначала
+      const aIsFavorite = favoriteBanks.includes(a.bankId || a.bankName);
+      const bIsFavorite = favoriteBanks.includes(b.bankId || b.bankName);
+      
+      if (aIsFavorite && !bIsFavorite) return -1;
+      if (!aIsFavorite && bIsFavorite) return 1;
+      
+      // Затем по алфавиту
+      return a.bankName.localeCompare(b.bankName, language);
     });
 
   if (isLoading) {
@@ -85,13 +122,13 @@ export const BankRatesTable = () => {
       <Box w="100%" h="100%" py={4}>
         <Box
           p={4}
-          bg="red.50"
+          bg="red.subtle"
           borderRadius="md"
           border="1px solid"
           borderColor="red.200"
           data-testid="error-message"
         >
-          <Text color="red.600" fontWeight="500" mb={3}>
+          <Text color="red.fg" fontWeight="500" mb={3}>
             Failed to load exchange rates
           </Text>
           <Button
@@ -118,10 +155,10 @@ export const BankRatesTable = () => {
       data-testid="bank-rates-table"
     >
       <Box mb={3}>
-        <Text fontSize="lg" fontWeight="600" color="black" mb={1}>
+        <Text fontSize="lg" fontWeight="600" color="fg" mb={1}>
           Курсы банков
         </Text>
-        <Text fontSize="xs" color="gray.600">
+        <Text fontSize="xs" color="fg.muted">
           Актуальные курсы покупки и продажи валют
         </Text>
       </Box>
@@ -129,22 +166,25 @@ export const BankRatesTable = () => {
       <Box overflow="auto" flex="1">
         <Box
           display="grid"
-          gridTemplateColumns={{ base: "1fr 60px 80px 80px 80px", lg: "1.5fr 60px 80px 80px 80px 120px" }}
+          gridTemplateColumns={{
+            base: showBankLogos ? "1fr 60px 80px 80px 80px" : "1fr 80px 80px 80px",
+            lg: showBankLogos ? "1.5fr 60px 80px 80px 80px 120px" : "1.5fr 80px 80px 80px 120px"
+          }}
           gap={{ base: 2, lg: 4 }}
           py={3}
           px={2}
           borderBottom="1px solid"
-          borderColor="gray.200"
+          borderColor="border"
           fontWeight="500"
-          color="gray.700"
+          color="fg"
           fontSize="xs"
           position="sticky"
           top="0"
-          bg="white"
+          bg="bg"
           zIndex="1"
         >
           <Text>Банк</Text>
-          <Text textAlign="center">Лого</Text>
+          {showBankLogos && <Text textAlign="center">Лого</Text>}
           <Text textAlign="center">Валюта</Text>
           <Text textAlign="center">Покупка</Text>
           <Text textAlign="center">Продажа</Text>
@@ -156,33 +196,39 @@ export const BankRatesTable = () => {
             <Box
               key={`${rate.buyIso}-${rate.sellIso}-${index}`}
               display="grid"
-              gridTemplateColumns={{ base: "1fr 60px 80px 80px 80px", lg: "1.5fr 60px 80px 80px 80px 120px" }}
+              gridTemplateColumns={{
+                base: showBankLogos ? "1fr 60px 80px 80px 80px" : "1fr 80px 80px 80px",
+                lg: showBankLogos ? "1.5fr 60px 80px 80px 80px 120px" : "1.5fr 80px 80px 80px 120px"
+              }}
               gap={{ base: 2, lg: 4 }}
               py={3}
               px={2}
               borderBottom={
                 index < (filteredRates || []).length - 1 ? "1px solid" : "none"
               }
-              borderColor="gray.100"
+              borderColor="border.subtle"
               _hover={{
-                bg: "gray.50",
+                bg: "bg.subtle",
               }}
-              transition="background-color 0.2s"
+              transition={animationsEnabled ? "background-color 0.2s" : "none"}
             >
               <Box>
                 <Text
                   fontWeight="500"
-                  color="black"
+                  color="fg"
                   fontSize="sm"
                   overflow="hidden"
                   textOverflow="ellipsis"
                   whiteSpace="nowrap"
                 >
                   {rate.bankName}
+                  {favoriteBanks.includes(rate.bankId || rate.bankName) && (
+                    <Text as="span" color="yellow.500" ml={1}>⭐</Text>
+                  )}
                 </Text>
                 <Text
                   fontSize="xs"
-                  color="gray.500"
+                  color="fg.muted"
                   overflow="hidden"
                   textOverflow="ellipsis"
                   whiteSpace="nowrap"
@@ -191,68 +237,70 @@ export const BankRatesTable = () => {
                 </Text>
               </Box>
 
-              <Box display="flex" justifyContent="center" alignItems="center">
-                {rate?.logoUrl ? (
-                  <Box
-                    w="32px"
-                    h="32px"
-                    borderRadius="4px"
-                    overflow="hidden"
-                    border="1px solid"
-                    borderColor="gray.200"
-                  >
-                    <img
-                      src={rate.logoUrl}
-                      alt={rate.bankName}
-                      style={{
-                        width: "100%",
-                        height: "100%",
-                        objectFit: "contain",
-                      }}
-                    />
-                  </Box>
-                ) : (
-                  <Box
-                    w="32px"
-                    h="32px"
-                    bg="gray.100"
-                    borderRadius="4px"
-                    display="flex"
-                    alignItems="center"
-                    justifyContent="center"
-                    border="1px solid"
-                    borderColor="gray.200"
-                  >
-                    <Text fontSize="xs" color="gray.400" textAlign="center">
-                      🏦
-                    </Text>
-                  </Box>
-                )}
-              </Box>
+              {showBankLogos && (
+                <Box display="flex" justifyContent="center" alignItems="center">
+                  {rate?.logoUrl ? (
+                    <Box
+                      w="32px"
+                      h="32px"
+                      borderRadius="4px"
+                      overflow="hidden"
+                      border="1px solid"
+                      borderColor="border"
+                    >
+                      <img
+                        src={rate.logoUrl}
+                        alt={rate.bankName}
+                        style={{
+                          width: "100%",
+                          height: "100%",
+                          objectFit: "contain",
+                        }}
+                      />
+                    </Box>
+                  ) : (
+                    <Box
+                      w="32px"
+                      h="32px"
+                      bg="bg.subtle"
+                      borderRadius="4px"
+                      display="flex"
+                      alignItems="center"
+                      justifyContent="center"
+                      border="1px solid"
+                      borderColor="border"
+                    >
+                      <Text fontSize="xs" color="fg.muted" textAlign="center">
+                        🏦
+                      </Text>
+                    </Box>
+                  )}
+                </Box>
+              )}
 
               <Box textAlign="center">
-                <Text fontSize="2xs" color="gray.500">
+                <Text fontSize="2xs" color="fg.muted">
                   {rate.quantity}
                 </Text>
-                <Text fontWeight="500" color="black" fontSize="xs">
+                <Text fontWeight="500" color="fg" fontSize="xs">
                   {rate?.sellIso}
                 </Text>
               </Box>
 
               <Box textAlign="center">
                 <Text fontWeight="600" color="green.600" fontSize="sm">
-                  {rate.buyRate.toFixed(4)}
+                  {formatter.format(rate.buyRate)}
                 </Text>
               </Box>
 
               <Box textAlign="center">
                 <Text fontWeight="600" color="red.600" fontSize="sm">
-                  {rate.sellRate.toFixed(4)}
+                  {formatter.format(rate.sellRate)}
                 </Text>
               </Box>
 
               <Box textAlign="center" display={{ base: "none", lg: "block" }}>
-                <Text fontSize="xs" color="gray.600">
+                <Text fontSize="xs" color="fg.muted">
                   {formatDateToRussian(rate.date)}
                 </Text>
               </Box>
@@ -265,7 +313,7 @@ export const BankRatesTable = () => {
             gridColumn="1 / -1"
             data-testid="empty-rates-message"
           >
-            <Text color="gray.500" fontSize="sm">
+            <Text color="fg.muted" fontSize="sm">
               {fromCurrency && toCurrency
                 ? `No exchange rates available for ${fromCurrency.code}/${toCurrency.code}`
                 : "No exchange rates available"}
@@ -277,12 +325,12 @@ export const BankRatesTable = () => {
       <Box
         mt={4}
         p={3}
-        bg="gray.50"
+        bg="bg.subtle"
         borderRadius="8px"
         border="1px solid"
-        borderColor="gray.200"
+        borderColor="border"
       >
-        <Text fontSize="sm" color="gray.600" textAlign="center">
+        <Text fontSize="sm" color="fg.muted" textAlign="center">
           Курсы обновляются в режиме реального времени
         </Text>
       </Box>
