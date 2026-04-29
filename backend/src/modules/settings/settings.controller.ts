@@ -25,8 +25,8 @@ export class SettingsController {
   constructor(private readonly settingsService: SettingsService) {}
 
   @Get()
-  async getSettings(): Promise<GetSettingsResponse> {
-    const settings = await this.settingsService.getSettings();
+  getSettings(): GetSettingsResponse {
+    const settings = this.settingsService.getSettings();
     return {
       success: true,
       data: settings,
@@ -34,8 +34,12 @@ export class SettingsController {
   }
 
   @Put()
-  async updateSettings(@Body() request: UpdateSettingsRequest): Promise<UpdateSettingsResponse> {
-    const updatedSettings = await this.settingsService.updateSettings(request.settings);
+  updateSettings(
+    @Body() request: UpdateSettingsRequest,
+  ): UpdateSettingsResponse {
+    const updatedSettings = this.settingsService.updateSettings(
+      request.settings,
+    );
     return {
       success: true,
       data: updatedSettings,
@@ -43,8 +47,8 @@ export class SettingsController {
   }
 
   @Post('reset')
-  async resetSettings(): Promise<ResetSettingsResponse> {
-    const defaultSettings = await this.settingsService.resetSettings();
+  resetSettings(): ResetSettingsResponse {
+    const defaultSettings = this.settingsService.resetSettings();
     return {
       success: true,
       data: defaultSettings,

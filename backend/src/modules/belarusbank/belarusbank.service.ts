@@ -47,7 +47,7 @@ export class BelarusBankService extends AbstractBank {
     });
 
     const typedRates = (apiResponse as any[])
-      .map((arg) => this.transformRates(arg))
+      .map((arg) => this.transformRates(arg as Record<string, unknown>))
       .filter((arg) => typeof arg !== 'undefined');
 
     if (typedRates.length) {
@@ -57,11 +57,11 @@ export class BelarusBankService extends AbstractBank {
     return [];
   }
 
-  private transformRates(data: any): BankRate | undefined {
+  private transformRates(data: Record<string, unknown>): BankRate | undefined {
     const date = new Date().toISOString();
     // console.log(data, 'DATA in transformRates');
-    const buy = data[`USD_in`];
-    const sell = data[`USD_out`];
+    const buy = data['USD_in'] as string;
+    const sell = data['USD_out'] as string;
 
     if (!buy || !sell || buy === '0.0000' || sell === '0.0000') {
       return undefined;
@@ -84,4 +84,3 @@ export class BelarusBankService extends AbstractBank {
     };
   }
 }
-

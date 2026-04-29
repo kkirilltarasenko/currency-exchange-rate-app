@@ -4,28 +4,28 @@ export interface AppSettings {
   // Внешний вид
   theme: 'light' | 'dark' | 'system';
   language: 'ru' | 'en' | 'be';
-  
+
   // Валютные настройки
   defaultBaseCurrency: string;
   defaultTargetCurrency: string;
   decimalPlaces: number;
   numberFormat: 'standard' | 'compact';
-  
+
   // Обновление данных
   autoRefresh: boolean;
   refreshInterval: number; // в секундах
-  
+
   // Уведомления
   notifications: boolean;
   soundEnabled: boolean;
-  
+
   // Избранные банки
   favoriteBanks: string[];
-  
+
   // История
   saveHistory: boolean;
   historyLimit: number;
-  
+
   // Дополнительные настройки
   showBankLogos: boolean;
   compactMode: boolean;
@@ -55,11 +55,11 @@ const DEFAULT_SETTINGS: AppSettings = {
 export class SettingsService {
   private currentSettings: AppSettings = { ...DEFAULT_SETTINGS };
 
-  async getSettings(): Promise<AppSettings> {
+  getSettings(): AppSettings {
     return { ...this.currentSettings };
   }
 
-  async updateSettings(partialSettings: Partial<AppSettings>): Promise<AppSettings> {
+  updateSettings(partialSettings: Partial<AppSettings>): AppSettings {
     this.currentSettings = {
       ...this.currentSettings,
       ...partialSettings,
@@ -67,7 +67,7 @@ export class SettingsService {
     return { ...this.currentSettings };
   }
 
-  async resetSettings(): Promise<AppSettings> {
+  resetSettings(): AppSettings {
     this.currentSettings = { ...DEFAULT_SETTINGS };
     return { ...this.currentSettings };
   }

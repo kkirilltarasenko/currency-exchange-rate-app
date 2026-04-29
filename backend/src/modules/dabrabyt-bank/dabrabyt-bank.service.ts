@@ -34,7 +34,8 @@ interface DabrabytBankRate {
 export class DabrabytBankService extends AbstractBank {
   protected apiUrl = 'https://bankdabrabyt.by/export_courses.php';
   protected bankName = 'Дабрабыт';
-  protected logoUrl = 'https://bankdabrabyt.by/upload/%D0%9B%D0%BE%D0%B3%D0%BE.png';
+  protected logoUrl =
+    'https://bankdabrabyt.by/upload/%D0%9B%D0%BE%D0%B3%D0%BE.png';
   protected responseType = 'xml' as const;
 
   private readonly currencyCodeMap: Record<string, number> = {
