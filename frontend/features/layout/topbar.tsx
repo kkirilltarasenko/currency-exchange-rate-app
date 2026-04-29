@@ -1,7 +1,6 @@
 "use client"
 
 import { Box, Flex, Text } from "@chakra-ui/react";
-import { ColorModeButton } from "@/components/ui/color-mode";
 import { useCurrentRouteInfo } from "@/shared/hooks/use-current-route-info";
 
 export function Topbar() {
@@ -28,7 +27,6 @@ export function Topbar() {
           </Text>
         </Box>
 
-        <ColorModeButton />
       </Flex>
     </Box>
   )

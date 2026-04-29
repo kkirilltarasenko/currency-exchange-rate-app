@@ -52,7 +52,6 @@ export const DEFAULT_SETTINGS: AppSettings = {
 export const SUPPORTED_LANGUAGES = [
   { code: 'ru', name: 'Русский', flag: '' },
   { code: 'en', name: 'English', flag: '' },
-  { code: 'be', name: 'Беларуская', flag: '' },
 ] as const;
 
 export const SUPPORTED_CURRENCIES = [

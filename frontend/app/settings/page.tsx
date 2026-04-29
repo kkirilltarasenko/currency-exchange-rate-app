@@ -20,12 +20,15 @@ import {
   SettingsManagement,
 } from "../../features/settings";
 import { ServerStatus } from "../../features/settings/components/server-status";
+import { LanguageSettings } from "../../features/settings/components/language-settings";
 import { useSettingsContext } from "../../features/settings/context/settings-provider";
+import { useTranslations } from "@/features/localization";
 
 const SettingsPage = () => {
   const searchParams = useSearchParams();
   const router = useRouter();
   const currentTab = searchParams.get('tab') || 'appearance';
+  const { t } = useTranslations();
 
   const {
     settings,
@@ -50,7 +53,7 @@ const SettingsPage = () => {
       <Center h="400px" data-testid="settings-loading">
         <VStack gap={4}>
           <Spinner size="lg" />
-          <Text>Загрузка настроек...</Text>
+          <Text>{t('common.loading')}</Text>
         </VStack>
       </Center>
     );
@@ -59,18 +62,21 @@ const SettingsPage = () => {
   const tabItems = [
     {
       value: "appearance",
-      label: "Внешний вид",
+      label: t('settings.appearance'),
       icon: LuPalette,
       content: (
-        <AppearanceSettings
-          settings={settings}
-          onUpdateSetting={updateSetting}
-        />
+        <VStack gap={6} align="stretch">
+          <AppearanceSettings
+            settings={settings}
+            onUpdateSetting={updateSetting}
+          />
+          <LanguageSettings />
+        </VStack>
       ),
     },
     {
       value: "currency",
-      label: "Валюты",
+      label: t('settings.currency'),
       icon: LuCoins,
       content: (
         <CurrencySettings
@@ -81,7 +87,7 @@ const SettingsPage = () => {
     },
     {
       value: "management",
-      label: "Управление",
+      label: t('settings.advanced'),
       icon: LuSettings,
       content: (
         <SettingsManagement
@@ -95,59 +101,113 @@ const SettingsPage = () => {
   ];
 
   return (
-    <Box w="100%" h="100%" data-testid="settings-page">
-      <VStack gap={4} align="stretch" h="100%" minH="0">
-        <Box textAlign="left" flexShrink={0}>
-          <Heading size="md" mb={1}>
-            Настройки приложения
-          </Heading>
-          <Text color="gray.600" fontSize="sm">
-            Настройте приложение под свои предпочтения
-          </Text>
-        </Box>
+    <Box w="100%" h="100%" data-testid="settings-page" p={6}>
+      {/* White Card Container */}
+      <Box
+        bg="white"
+        borderRadius="2xl"
+        boxShadow="xl"
+        border="1px solid"
+        borderColor="gray.200"
+        h="100%"
+        overflow="hidden"
+        _dark={{
+          bg: "gray.800",
+          borderColor: "gray.700"
+        }}
+      >
+        <Box p={8} h="100%">
+          <VStack gap={6} align="stretch" h="100%" minH="0">
+            {/* Header Section */}
+            <Box textAlign="left" flexShrink={0}>
+              <Heading size="lg" mb={2} color="fg.emphasized">
+                {t('settings.title')}
+              </Heading>
+              <Text color="fg.muted" fontSize="md">
+                {t('settings.description')}
+              </Text>
+            </Box>
 
-        {/* Статус сервера */}
-        <ServerStatus />
+            {/* Server Status Card */}
+            <Box flexShrink={0}>
+              <ServerStatus />
+            </Box>
 
-        <Tabs.Root
-          value={currentTab}
-          onValueChange={handleTabChange}
-          variant="enclosed"
-          flex="1"
-          display="flex"
-          flexDirection="column"
-          minHeight="0"
-        >
-          <Tabs.List flexShrink={0}>
-            {tabItems.map((tab) => {
-              const Icon = tab.icon;
-              return (
-                <Tabs.Trigger key={tab.value} value={tab.value} fontSize="sm" px={3} py={2}>
-                  <Icon style={{ marginRight: '6px' }} size={16} />
-                  {tab.label}
-                </Tabs.Trigger>
-              );
-            })}
-          </Tabs.List>
-
-          {tabItems.map((tab) => (
-            <Tabs.Content
-              key={tab.value}
-              value={tab.value}
-              pt={4}
+            {/* Main Content Area */}
+            <Box
               flex="1"
-              overflow="auto"
-              display="flex"
-              flexDirection="column"
-              minHeight="0"
+              bg="bg.surface"
+              borderRadius="xl"
+              border="1px solid"
+              borderColor="border.subtle"
+              overflow="hidden"
+              boxShadow="sm"
             >
-              <Box flex="1" overflow="auto">
-                {tab.content}
-              </Box>
-            </Tabs.Content>
-          ))}
-        </Tabs.Root>
-      </VStack>
+              <Tabs.Root
+                value={currentTab}
+                onValueChange={handleTabChange}
+                variant="enclosed"
+                h="100%"
+                display="flex"
+                flexDirection="column"
+              >
+                <Box
+                  borderBottom="1px solid"
+                  borderColor="border.subtle"
+                  bg="bg.muted"
+                  px={6}
+                  py={4}
+                >
+                  <Tabs.List gap={1} bg="transparent">
+                    {tabItems.map((tab) => {
+                      const Icon = tab.icon;
+                      return (
+                        <Tabs.Trigger
+                          key={tab.value}
+                          value={tab.value}
+                          fontSize="sm"
+                          px={4}
+                          py={3}
+                          borderRadius="lg"
+                          fontWeight="medium"
+                          color="fg.muted"
+                          _selected={{
+                            bg: "bg.emphasized",
+                            color: "fg.emphasized",
+                            boxShadow: "sm"
+                          }}
+                          _hover={{
+                            bg: "bg.subtle",
+                            color: "fg"
+                          }}
+                          transition="all 0.2s"
+                        >
+                          <Icon style={{ marginRight: '8px' }} size={18} />
+                          {tab.label}
+                        </Tabs.Trigger>
+                      );
+                    })}
+                  </Tabs.List>
+                </Box>
+
+                {tabItems.map((tab) => (
+                  <Tabs.Content
+                    key={tab.value}
+                    value={tab.value}
+                    flex="1"
+                    overflow="auto"
+                    p={6}
+                  >
+                    <Box maxW="6xl" mx="auto">
+                      {tab.content}
+                    </Box>
+                  </Tabs.Content>
+                ))}
+              </Tabs.Root>
+            </Box>
+          </VStack>
+        </Box>
+      </Box>
     </Box>
   );
 };

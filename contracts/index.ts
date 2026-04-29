@@ -22,7 +22,6 @@ export type {
 } from './common.types';
 
 export type {
-  HelloResponse,
   HelloWorldResponse,
 } from './hello.types';
 

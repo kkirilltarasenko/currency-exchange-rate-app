@@ -4,10 +4,12 @@ import { Box, HStack, Icon, Text, VStack } from "@chakra-ui/react";
 import { LINKS } from "@/shared/router/router.types";
 import { useCurrentRouteInfo } from "@/shared/hooks/use-current-route-info";
 import { CurrencyExchangeLogo } from "@/features/logo";
+import { useTranslations } from "@/features/localization";
 import Link from "next/link";
 
 export function Sidebar() {
   const { getIsActiveRoute } = useCurrentRouteInfo();
+  const { t } = useTranslations();
 
   return (
     <Box
@@ -26,13 +28,13 @@ export function Sidebar() {
         <HStack gap={2}>
           <CurrencyExchangeLogo size={48} data-testid="logo" />
           <Text fontSize="lg" fontWeight="bold" color="fg" data-testid="app-title">
-            Currency Exchange
+            {t('navigation.currencyConverter')}
           </Text>
         </HStack>
       </Box>
       
       <VStack align="start" gap={1} p={4} data-testid="nav-links">
-        {LINKS.map(({ title, path, icon, disabled }) => !disabled && (
+        {LINKS.map(({ titleKey, path, icon, disabled }) => !disabled && (
           <Box
             as={Link}
             /* eslint-disable-next-line @typescript-eslint/ban-ts-comment */
@@ -57,7 +59,7 @@ export function Sidebar() {
             className={getIsActiveRoute(path) ? 'active' : ''}
           >
             <Icon as={icon} boxSize={4} />
-            <Text fontSize="sm">{title}</Text>
+            <Text fontSize="sm">{t(titleKey as "navigation.home" | "navigation.exchangeRates" | "navigation.history" | "navigation.settings")}</Text>
           </Box>
         ))}
       </VStack>

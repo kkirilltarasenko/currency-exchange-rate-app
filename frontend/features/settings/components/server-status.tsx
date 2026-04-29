@@ -2,9 +2,11 @@
 
 import { Box, Text, Badge, VStack, HStack } from '@chakra-ui/react';
 import { useSettingsQuery } from '../hooks/use-settings-query';
+import { useTranslations } from '@/features/localization';
 
 export function ServerStatus() {
   const { isLoading, error, isError } = useSettingsQuery();
+  const { t } = useTranslations();
 
   const getStatusColor = () => {
     if (isLoading) return 'yellow';
@@ -13,37 +15,52 @@ export function ServerStatus() {
   };
 
   const getStatusText = () => {
-    if (isLoading) return 'Подключение...';
-    if (isError) return 'Офлайн';
-    return 'Онлайн';
+    if (isLoading) return t('common.loading');
+    if (isError) return t('settings.disconnected');
+    return t('settings.connected');
   };
 
   const getStatusDescription = () => {
-    if (isLoading) return 'Проверяем подключение к серверу';
-    if (isError) return 'Настройки сохраняются только локально';
-    return 'Настройки синхронизируются с сервером';
+    if (isLoading) return t('settings.syncStatus');
+    if (isError) return t('settings.syncError');
+    return t('settings.synced');
   };
 
   return (
-    <Box p={4} borderWidth={1} borderRadius="md" bg="gray.50" _dark={{ bg: "gray.800" }}>
-      <VStack align="start" p={2}>
-        <HStack>
-          <Text fontSize="sm" fontWeight="medium">
-            Статус сервера:
+    <Box
+      p={5}
+      borderWidth={1}
+      borderRadius="xl"
+      bg="bg.surface"
+      borderColor="border.subtle"
+      boxShadow="sm"
+    >
+      <HStack justify="space-between" align="center">
+        <VStack align="start" gap={1}>
+          <Text fontSize="sm" fontWeight="semibold" color="fg.emphasized">
+            {t('settings.serverStatus')}
           </Text>
-          <Badge colorScheme={getStatusColor()} variant="solid">
-            {getStatusText()}
-          </Badge>
-        </HStack>
-        <Text fontSize="xs" color="gray.600" _dark={{ color: "gray.400" }}>
-          {getStatusDescription()}
-        </Text>
-        {error && (
-          <Text fontSize="xs" color="red.500">
-            Ошибка: {error.message}
+          <Text fontSize="xs" color="fg.muted">
+            {getStatusDescription()}
           </Text>
-        )}
-      </VStack>
+          {error && (
+            <Text fontSize="xs" color="red.500">
+              {t('common.error')}: {error.message}
+            </Text>
+          )}
+        </VStack>
+        <Badge
+          colorScheme={getStatusColor()}
+          variant="solid"
+          px={3}
+          py={1}
+          borderRadius="full"
+          fontSize="xs"
+          fontWeight="medium"
+        >
+          {getStatusText()}
+        </Badge>
+      </HStack>
     </Box>
   );
 }

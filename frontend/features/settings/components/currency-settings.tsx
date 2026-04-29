@@ -15,6 +15,7 @@ import {
   Checkbox,
 } from "@chakra-ui/react";
 import { AppSettings, SUPPORTED_CURRENCIES, REFRESH_INTERVALS } from "../types";
+import { useTranslations } from "@/features/localization";
 
 interface CurrencySettingsProps {
   settings: AppSettings;
@@ -117,17 +118,18 @@ function RefreshIntervalSelect({
 }
 
 export function CurrencySettings({ settings, onUpdateSetting }: CurrencySettingsProps) {
+  const { t } = useTranslations();
   return (
     <Card.Root w="100%">
       <Card.Header pb={3}>
-        <Heading size="sm">Настройки валют</Heading>
+        <Heading size="sm">{t('settings.currency')}</Heading>
       </Card.Header>
       <Card.Body pt={0}>
         <VStack gap={4} align="stretch">
           {/* Валюты по умолчанию */}
           <Box>
             <Text fontSize="xs" color="fg.muted" mb={3}>
-              Эти валюты будут выбраны по умолчанию в конвертере
+              {t('settings.defaultBaseCurrency')}
             </Text>
             <HStack gap={4} align="end">
               <Box flex="1">
@@ -137,7 +139,7 @@ export function CurrencySettings({ settings, onUpdateSetting }: CurrencySettings
                     console.log('Changing base currency to:', value);
                     onUpdateSetting('defaultBaseCurrency', value);
                   }}
-                  label="Базовая валюта (отдаю)"
+                  label={t('settings.baseCurrencyLabel')}
                 />
               </Box>
               <Box flex="1">
@@ -147,7 +149,7 @@ export function CurrencySettings({ settings, onUpdateSetting }: CurrencySettings
                     console.log('Changing target currency to:', value);
                     onUpdateSetting('defaultTargetCurrency', value);
                   }}
-                  label="Целевая валюта (получаю)"
+                  label={t('settings.defaultTargetCurrency')}
                 />
               </Box>
             </HStack>
@@ -155,7 +157,7 @@ export function CurrencySettings({ settings, onUpdateSetting }: CurrencySettings
 
           {/* Точность отображения */}
           <Box>
-            <Text fontWeight="medium" mb={2} fontSize="sm">Количество знаков после запятой</Text>
+            <Text fontWeight="medium" mb={2} fontSize="sm">{t('settings.decimalPlacesTitle')}</Text>
             <Input
               type="number"
               value={settings.decimalPlaces}
@@ -165,13 +167,13 @@ export function CurrencySettings({ settings, onUpdateSetting }: CurrencySettings
               size="sm"
             />
             <Text fontSize="xs" color="fg.muted" mt={1}>
-              От 0 до 8 знаков после запятой
+              {t('settings.decimalPlaces')}
             </Text>
           </Box>
 
           {/* Формат чисел */}
           <Box>
-            <Text fontWeight="medium" mb={2} fontSize="sm">Формат отображения чисел</Text>
+            <Text fontWeight="medium" mb={2} fontSize="sm">{t('settings.numberFormat')}</Text>
             <HStack gap={3}>
               <Box
                 p={2}
@@ -186,7 +188,7 @@ export function CurrencySettings({ settings, onUpdateSetting }: CurrencySettings
                 textAlign="center"
                 flex="1"
               >
-                <Text fontWeight="medium" fontSize="sm">Стандартный</Text>
+                <Text fontWeight="medium" fontSize="sm">{t('settings.numberFormats.standard')}</Text>
                 <Text fontSize="xs" color="fg.muted">1,234.56</Text>
               </Box>
               <Box
@@ -202,7 +204,7 @@ export function CurrencySettings({ settings, onUpdateSetting }: CurrencySettings
                 textAlign="center"
                 flex="1"
               >
-                <Text fontWeight="medium" fontSize="sm">Компактный</Text>
+                <Text fontWeight="medium" fontSize="sm">{t('settings.numberFormats.compact')}</Text>
                 <Text fontSize="xs" color="fg.muted">1.23K</Text>
               </Box>
             </HStack>
@@ -212,9 +214,9 @@ export function CurrencySettings({ settings, onUpdateSetting }: CurrencySettings
           <VStack gap={3} align="stretch">
             <HStack justify="space-between" align="center">
               <VStack align="start" gap={0} flex="1">
-                <Text fontWeight="medium" fontSize="sm">Автообновление курсов</Text>
+                <Text fontWeight="medium" fontSize="sm">{t('settings.autoRefreshTitle')}</Text>
                 <Text fontSize="xs" color="fg.muted">
-                  Автоматическое обновление данных о курсах валют
+                  {t('settings.autoRefresh')}
                 </Text>
               </VStack>
               <Checkbox.Root
@@ -231,7 +233,7 @@ export function CurrencySettings({ settings, onUpdateSetting }: CurrencySettings
 
             {settings.autoRefresh && (
               <Box>
-                <Text fontWeight="medium" mb={2} fontSize="sm">Интервал обновления</Text>
+                <Text fontWeight="medium" mb={2} fontSize="sm">{t('settings.refreshInterval')}</Text>
                 <RefreshIntervalSelect
                   value={settings.refreshInterval}
                   onChange={(value) => onUpdateSetting('refreshInterval', value)}

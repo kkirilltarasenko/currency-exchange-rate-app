@@ -24,13 +24,11 @@ export function MainLayout({ children }: MainLayoutProps) {
         data-testid="main-layout"
       >
         <Sidebar />
-        <Topbar />
         
         <Box
           ml="280px"
-          mt="70px"
           p={3}
-          h="calc(100% - 70px)"
+          h="100%"
           overflow="auto"
           bg="bg.subtle"
         >

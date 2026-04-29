@@ -1,10 +1,14 @@
 "use client";
 
-import { Box, Button, Input, Stack, Text } from "@chakra-ui/react";
-import { FaExchangeAlt } from "react-icons/fa";
+import { Box, Button, Input, Stack, Text, Badge, Flex, HStack, VStack, Separator } from "@chakra-ui/react";
+import { FaExchangeAlt, FaClock, FaInfoCircle, FaCalculator, FaChartLine } from "react-icons/fa";
+import { MdTrendingUp } from "react-icons/md";
+import { Tooltip } from "../../../components/ui/tooltip";
 import { useCurrencyConversionContext } from "../context/currency-conversion.context";
 import { CurrencySelect } from "./currency-select";
 import { useAppSettings } from "../../../shared/hooks/use-app-settings";
+import { useCurrencyRatesQuery } from "../hooks/use-currency-rates.query";
+import { useTranslations } from "@/features/localization";
 
 export const CurrencyConverter = () => {
   const {
@@ -22,7 +26,8 @@ export const CurrencyConverter = () => {
   } = useCurrencyConversionContext();
 
   const { decimalPlaces, numberFormat, animationsEnabled } = useAppSettings();
-
+  const { data: bankData, isLoading: isLoadingRates } = useCurrencyRatesQuery();
+  const { t } = useTranslations();
 
   // Функция для форматирования чисел согласно настройкам
   const formatNumber = (value: number): string => {
@@ -33,6 +38,90 @@ export const CurrencyConverter = () => {
       }).format(value);
     }
     return value.toFixed(decimalPlaces);
+  };
+
+  // Получение информации о лучшем банке
+  const getBestBankInfo = () => {
+    if (!bankData?.length) return null;
+    
+    const allRates = bankData.flatMap((bank) => bank?.rates || []);
+    const relevantRates = allRates.filter((rate) => {
+      return (rate.sellIso === fromCurrency.code && rate.buyIso === toCurrency.code) ||
+             (rate.sellIso === toCurrency.code && rate.buyIso === fromCurrency.code);
+    });
+
+    if (relevantRates.length === 0) return null;
+
+    let bestRate = 0;
+    let bestBank = '';
+    
+    relevantRates.forEach((rate) => {
+      const bankInfo = bankData.find(bank => bank?.rates?.includes(rate));
+      if (!bankInfo) return;
+
+      let currentRate = 0;
+      if (rate.sellIso === fromCurrency.code && rate.buyIso === toCurrency.code) {
+        currentRate = rate.buyRate / rate.quantity;
+      } else if (rate.sellIso === toCurrency.code && rate.buyIso === fromCurrency.code) {
+        currentRate = rate.quantity / rate.sellRate;
+      }
+
+      if (currentRate > bestRate) {
+        bestRate = currentRate;
+        bestBank = bankInfo.bankName;
+      }
+    });
+
+    return { bank: bestBank, rate: bestRate };
+  };
+
+  // Быстрые суммы для конвертации
+  const quickAmounts = [100, 500, 1000, 5000];
+
+  // Расчет экономии при использовании лучшего курса
+  const calculateSavings = () => {
+    if (!bankData?.length || fromAmount <= 0) return null;
+    
+    const allRates = bankData.flatMap((bank) => bank?.rates || []);
+    const relevantRates = allRates.filter((rate) => {
+      return (rate.sellIso === fromCurrency.code && rate.buyIso === toCurrency.code) ||
+             (rate.sellIso === toCurrency.code && rate.buyIso === fromCurrency.code);
+    });
+
+    if (relevantRates.length < 2) return null;
+
+    const rates = relevantRates.map(rate => {
+      if (rate.sellIso === fromCurrency.code && rate.buyIso === toCurrency.code) {
+        return rate.buyRate / rate.quantity;
+      } else {
+        return rate.quantity / rate.sellRate;
+      }
+    });
+
+    const bestRate = Math.max(...rates);
+    const worstRate = Math.min(...rates);
+    const savings = (bestRate - worstRate) * fromAmount;
+    
+    return savings > 0.01 ? savings : null;
+  };
+
+  // Получение времени последнего обновления
+  const getLastUpdateTime = () => {
+    if (!bankData?.length) return null;
+    
+    const allRates = bankData.flatMap((bank) => bank?.rates || []);
+    if (allRates.length === 0) return null;
+    
+    // Берем первую доступную дату
+    const lastDate = allRates[0]?.date;
+    if (!lastDate) return null;
+    
+    return new Date(lastDate).toLocaleString('ru-RU', {
+      day: '2-digit',
+      month: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
   };
 
   const handleFromAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -50,22 +139,26 @@ export const CurrencyConverter = () => {
     swapCurrencies();
   };
 
+  const handleQuickAmount = (amount: number) => {
+    updateFromAmount(amount);
+  };
+
   return (
     <Box w="100%" py={2} data-testid="currency-converter">
       <Stack gap={3}>
         <Box>
           <Text fontSize="lg" fontWeight="600" color="fg" mb={1}>
-            Конвертер валют
+            {t('currency.converter')}
           </Text>
           <Text fontSize="xs" color="fg.muted">
-            Введите сумму в любое поле для автоматической конвертации
+            {t('currency.enterAmount')}
           </Text>
         </Box>
 
         <Stack gap={2}>
           <Box>
             <Text mb={1} fontSize="xs" fontWeight="500" color="fg">
-              Отдам
+              {t('currency.from')}
             </Text>
             <Stack direction="row" gap={2} align="center">
               <Box flex="1">
@@ -123,7 +216,7 @@ export const CurrencyConverter = () => {
 
           <Box>
             <Text mb={1} fontSize="xs" fontWeight="500" color="fg">
-              Получу
+              {t('currency.to')}
             </Text>
             <Stack direction="row" gap={2} align="center">
               <Box flex="1">
@@ -157,23 +250,88 @@ export const CurrencyConverter = () => {
             </Stack>
           </Box>
 
+          {/* Быстрые суммы */}
+          <Box>
+            <Text fontSize="2xs" color="fg.muted" mb={1}>
+              {t('currency.selectCurrency')}:
+            </Text>
+            <HStack gap={1} flexWrap="wrap">
+              {quickAmounts.map((amount) => (
+                <Button
+                  key={amount}
+                  size="xs"
+                  variant="outline"
+                  onClick={() => handleQuickAmount(amount)}
+                  fontSize="2xs"
+                  px={2}
+                  py={1}
+                  h="auto"
+                  minH="24px"
+                  borderColor="border.subtle"
+                  _hover={{ borderColor: "blue.500", bg: "blue.subtle" }}
+                >
+                  {formatNumber(amount)}
+                </Button>
+              ))}
+            </HStack>
+          </Box>
+
           {fromAmount > 0 && toAmount > 0 && (
-            <Box
-              p={2}
-              bg="blue.subtle"
-              borderRadius="6px"
-              border="1px solid"
-              borderColor="blue.200"
-              textAlign="center"
-              data-testid="exchange-rate-display"
-            >
-              <Text fontSize="xs" color="blue.fg" fontWeight="500">
-                1 {fromCurrency.code} = {getExchangeRate(fromCurrency, toCurrency).toFixed(4)} {toCurrency.code}
-              </Text>
-              <Text fontSize="2xs" color="blue.fg" mt={0.5}>
-                💰 Лучший курс из банковских данных
-              </Text>
-            </Box>
+            <VStack gap={2} align="stretch">
+              {/* Основная информация о курсе */}
+              <Box
+                p={3}
+                bg="blue.subtle"
+                borderRadius="8px"
+                border="1px solid"
+                borderColor="blue.200"
+                data-testid="exchange-rate-display"
+              >
+                <Flex justify="space-between" align="center" mb={2}>
+                  <Text fontSize="sm" color="blue.fg" fontWeight="600">
+                    1 {fromCurrency.code} = {getExchangeRate(fromCurrency, toCurrency).toFixed(4)} {toCurrency.code}
+                  </Text>
+                  <Badge colorScheme="blue" size="sm">
+                    <FaChartLine size={8} style={{ marginRight: '4px' }} />
+                    {t('currency.rate')}
+                  </Badge>
+                </Flex>
+                
+                {getBestBankInfo() && (
+                  <Text fontSize="2xs" color="blue.fg" mb={1}>
+                    🏦 {t('currency.bank')}: {getBestBankInfo()?.bank}
+                  </Text>
+                )}
+                
+                <Flex justify="space-between" align="center" fontSize="2xs" color="blue.fg">
+                  <Text>💰 Из банковских данных</Text>
+                  {getLastUpdateTime() && (
+                    <Flex align="center" gap={1}>
+                      <FaClock size={8} />
+                      <Text>{getLastUpdateTime()}</Text>
+                    </Flex>
+                  )}
+                </Flex>
+              </Box>
+
+              {/* Информация об экономии */}
+              {calculateSavings() && (
+                <Box
+                  p={2}
+                  bg="green.subtle"
+                  borderRadius="6px"
+                  border="1px solid"
+                  borderColor="green.200"
+                >
+                  <Flex align="center" gap={2}>
+                    <MdTrendingUp size={12} color="green" />
+                    <Text fontSize="2xs" color="green.fg" fontWeight="500">
+                      {t('currency.conversionResult')}: {calculateSavings()?.toFixed(2)} {toCurrency.code}
+                    </Text>
+                  </Flex>
+                </Box>
+              )}
+            </VStack>
           )}
         </Stack>
       </Stack>

@@ -15,62 +15,18 @@ import {
 } from "@chakra-ui/react";
 import { LuMoon, LuSun, LuMonitor } from "react-icons/lu";
 import { useColorMode } from "../../../components/ui/color-mode";
-import { AppSettings, SUPPORTED_LANGUAGES } from "../types";
+import { AppSettings } from "../types";
+import { useTranslations } from "@/features/localization";
 
 interface AppearanceSettingsProps {
   settings: AppSettings;
   onUpdateSetting: <K extends keyof AppSettings>(key: K, value: AppSettings[K]) => void;
 }
 
-interface LanguageSelectProps {
-  value: AppSettings['language'];
-  onChange: (language: AppSettings['language']) => void;
-}
-
-function LanguageSelect({ value, onChange }: LanguageSelectProps) {
-  const languageCollection = createListCollection({
-    items: SUPPORTED_LANGUAGES.map(lang => ({
-      label: `${lang.flag} ${lang.name}`,
-      value: lang.code,
-    }))
-  });
-
-  return (
-    <Select.Root
-      collection={languageCollection}
-      value={[value]}
-      onValueChange={(details) => {
-        const selectedValue = details.value[0] as AppSettings['language'];
-        onChange(selectedValue);
-      }}
-    >
-      <Select.HiddenSelect />
-      <Select.Control>
-        <Select.Trigger>
-          <Select.ValueText />
-        </Select.Trigger>
-        <Select.IndicatorGroup>
-          <Select.Indicator />
-        </Select.IndicatorGroup>
-      </Select.Control>
-      <Portal>
-        <Select.Positioner>
-          <Select.Content>
-            {languageCollection.items.map((item) => (
-              <Select.Item item={item} key={item.value}>
-                {item.label}
-                <Select.ItemIndicator />
-              </Select.Item>
-            ))}
-          </Select.Content>
-        </Select.Positioner>
-      </Portal>
-    </Select.Root>
-  );
-}
 
 export function AppearanceSettings({ settings, onUpdateSetting }: AppearanceSettingsProps) {
   const { colorMode, setColorMode } = useColorMode();
+  const { t } = useTranslations();
 
   const handleThemeChange = (theme: AppSettings['theme']) => {
     onUpdateSetting('theme', theme);
@@ -84,21 +40,23 @@ export function AppearanceSettings({ settings, onUpdateSetting }: AppearanceSett
   };
 
   const themeOptions = [
-    { value: 'light', label: 'Светлая', icon: LuSun },
-    { value: 'dark', label: 'Темная', icon: LuMoon },
-    { value: 'system', label: 'Системная', icon: LuMonitor },
+    { value: 'light', label: t('settings.themes.light'), icon: LuSun },
+    { value: 'dark', label: t('settings.themes.dark'), icon: LuMoon },
+    { value: 'system', label: t('settings.themes.system'), icon: LuMonitor },
   ];
 
   return (
-    <Card.Root w="100%">
-      <Card.Header pb={3}>
-        <Heading size="sm">Внешний вид</Heading>
+    <Card.Root w="100%" boxShadow="sm" borderColor="border.subtle">
+      <Card.Header pb={4}>
+        <Heading size="sm" color="fg.emphasized">{t('settings.appearance')}</Heading>
       </Card.Header>
       <Card.Body pt={0}>
-        <VStack gap={4} align="stretch">
+        <VStack gap={6} align="stretch">
           {/* Тема */}
           <Box>
-            <Text fontWeight="medium" mb={2} fontSize="sm">Тема оформления</Text>
+            <Text fontWeight="semibold" mb={3} fontSize="sm" color="fg.emphasized">
+              {t('settings.theme')}
+            </Text>
             <HStack gap={3}>
               {themeOptions.map((option) => {
                 const Icon = option.icon;
@@ -106,49 +64,55 @@ export function AppearanceSettings({ settings, onUpdateSetting }: AppearanceSett
                 return (
                   <Box
                     key={option.value}
-                    p={2}
-                    borderRadius="md"
+                    p={4}
+                    borderRadius="lg"
                     border="2px solid"
-                    borderColor={isSelected ? "blue.500" : "border"}
-                    bg={isSelected ? "blue.subtle" : "bg"}
+                    borderColor={isSelected ? "blue.500" : "border.subtle"}
+                    bg={isSelected ? "blue.50" : "bg.surface"}
                     cursor="pointer"
                     onClick={() => handleThemeChange(option.value as AppSettings['theme'])}
                     transition="all 0.2s"
-                    _hover={{ borderColor: "blue.300" }}
+                    _hover={{
+                      borderColor: isSelected ? "blue.600" : "blue.300",
+                      transform: "translateY(-1px)",
+                      boxShadow: "sm"
+                    }}
                     textAlign="center"
-                    minW="70px"
+                    minW="90px"
                     flex="1"
+                    position="relative"
                   >
-                    <Icon size={20} style={{ margin: '0 auto 6px' }} />
-                    <Text fontSize="xs">{option.label}</Text>
+                    <Icon size={24} style={{ margin: '0 auto 8px', color: isSelected ? '#3182ce' : undefined }} />
+                    <Text fontSize="sm" fontWeight={isSelected ? "semibold" : "medium"} color={isSelected ? "blue.600" : "fg"}>
+                      {option.label}
+                    </Text>
                   </Box>
                 );
               })}
             </HStack>
           </Box>
 
-          {/* Язык */}
-          <Box>
-            <Text fontWeight="medium" mb={2} fontSize="sm">Язык интерфейса</Text>
-            <LanguageSelect
-              value={settings.language}
-              onChange={(language: AppSettings['language']) => onUpdateSetting('language', language)}
-            />
-          </Box>
-
           {/* Дополнительные настройки внешнего вида */}
-          <VStack gap={3} align="stretch">
+          <Box
+            p={4}
+            borderRadius="lg"
+            bg="bg.muted"
+            border="1px solid"
+            borderColor="border.subtle"
+          >
             <HStack justify="space-between" align="center">
-              <VStack align="start" gap={0} flex="1">
-                <Text fontWeight="medium" fontSize="sm">Показывать логотипы банков</Text>
+              <VStack align="start" gap={1} flex="1">
+                <Text fontWeight="semibold" fontSize="sm" color="fg.emphasized">
+                  {t('settings.showBankLogos')}
+                </Text>
                 <Text fontSize="xs" color="fg.muted">
-                  Отображение логотипов в списке банков
+                  {t('settings.showBankLogosDescription')}
                 </Text>
               </VStack>
               <Checkbox.Root
                 checked={settings.showBankLogos}
                 onCheckedChange={(e) => onUpdateSetting('showBankLogos', Boolean(e.checked))}
-                size="sm"
+                size="lg"
               >
                 <Checkbox.HiddenInput />
                 <Checkbox.Control>
@@ -156,7 +120,7 @@ export function AppearanceSettings({ settings, onUpdateSetting }: AppearanceSett
                 </Checkbox.Control>
               </Checkbox.Root>
             </HStack>
-          </VStack>
+          </Box>
         </VStack>
       </Card.Body>
     </Card.Root>

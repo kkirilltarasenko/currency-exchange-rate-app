@@ -5,6 +5,7 @@ import { useCurrencyRatesQuery } from "../hooks/use-currency-rates.query";
 import { useCurrencyConversionContext } from "../context/currency-conversion.context";
 import { useAppSettings } from "../../../shared/hooks/use-app-settings";
 import { useNumberFormatter } from "../../../shared/utils/number-formatter";
+import { useTranslations } from "@/features/localization";
 
 // Функция для форматирования даты в формат "28 апреля 2026"
 const formatDateToRussian = (dateString: string): string => {
@@ -57,6 +58,7 @@ export const BankRatesTable = () => {
     language
   } = useAppSettings();
   const formatter = useNumberFormatter(settings);
+  const { t } = useTranslations();
   
   console.log(bankData, "DATA");
   const filteredRates = bankData
@@ -129,7 +131,7 @@ export const BankRatesTable = () => {
           data-testid="error-message"
         >
           <Text color="red.fg" fontWeight="500" mb={3}>
-            Failed to load exchange rates
+            {t('errors.ratesLoadError')}
           </Text>
           <Button
             size="sm"
@@ -138,7 +140,7 @@ export const BankRatesTable = () => {
             onClick={() => window.location.reload()}
             data-testid="retry-button"
           >
-            Retry
+            {t('common.refresh')}
           </Button>
         </Box>
       </Box>
@@ -156,10 +158,10 @@ export const BankRatesTable = () => {
     >
       <Box mb={3}>
         <Text fontSize="lg" fontWeight="600" color="fg" mb={1}>
-          Курсы банков
+          {t('currency.exchangeRates')}
         </Text>
         <Text fontSize="xs" color="fg.muted">
-          Актуальные курсы покупки и продажи валют
+          {t('currency.lastUpdated')}
         </Text>
       </Box>
 
@@ -183,12 +185,12 @@ export const BankRatesTable = () => {
           bg="bg"
           zIndex="1"
         >
-          <Text>Банк</Text>
-          {showBankLogos && <Text textAlign="center">Лого</Text>}
-          <Text textAlign="center">Валюта</Text>
-          <Text textAlign="center">Покупка</Text>
-          <Text textAlign="center">Продажа</Text>
-          <Text textAlign="center" display={{ base: "none", lg: "block" }}>Обновлено</Text>
+          <Text>{t('currency.bank')}</Text>
+          {showBankLogos && <Text textAlign="center">{t('currency.logo')}</Text>}
+          <Text textAlign="center">{t('currency.currency')}</Text>
+          <Text textAlign="center">{t('currency.buy')}</Text>
+          <Text textAlign="center">{t('currency.sell')}</Text>
+          <Text textAlign="center" display={{ base: "none", lg: "block" }}>{t('currency.date')}</Text>
         </Box>
 
         {filteredRates && filteredRates.length > 0 ? (
@@ -315,8 +317,8 @@ export const BankRatesTable = () => {
           >
             <Text color="fg.muted" fontSize="sm">
               {fromCurrency && toCurrency
-                ? `No exchange rates available for ${fromCurrency.code}/${toCurrency.code}`
-                : "No exchange rates available"}
+                ? `${t('currency.noRatesAvailable')} ${fromCurrency.code}/${toCurrency.code}`
+                : t('currency.noRatesAvailable')}
             </Text>
           </Box>
         )}
@@ -331,7 +333,7 @@ export const BankRatesTable = () => {
         borderColor="border"
       >
         <Text fontSize="sm" color="fg.muted" textAlign="center">
-          Курсы обновляются в режиме реального времени
+          {t('currency.lastUpdated')}
         </Text>
       </Box>
     </Box>

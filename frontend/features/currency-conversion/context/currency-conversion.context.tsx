@@ -10,7 +10,6 @@ const CURRENCIES: Currency[] = [
   { code: "BYN", name: "Belarusian Ruble", symbol: "Br" },
   { code: "EUR", name: "Euro", symbol: "€" },
   { code: "CNY", name: "Chinese Yuan", symbol: "¥" },
-  { code: "RUB", name: "Russian Ruble", symbol: "₽" },
 ];
 
 interface CurrencyConversionContextType {

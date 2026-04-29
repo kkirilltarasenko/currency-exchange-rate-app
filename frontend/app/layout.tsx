@@ -7,6 +7,7 @@ import { MainLayout } from "@/features/layout/main-layout";
 import { QueryClientProvider } from "@/global/query-client.provider";
 import { SettingsProvider } from "@/features/settings/context/settings-provider";
 import { SettingsSyncIndicator } from "@/features/settings/components/settings-sync-indicator";
+import { LocalizationProvider, LocaleProvider } from "@/features/localization";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -36,10 +37,14 @@ export default function RootLayout({
         <Provider>
           <QueryClientProvider>
             <SettingsProvider>
-              <MainLayout>
-                {children}
-              </MainLayout>
-              <SettingsSyncIndicator />
+              <LocalizationProvider>
+                <LocaleProvider>
+                  <MainLayout>
+                    {children}
+                  </MainLayout>
+                  <SettingsSyncIndicator />
+                </LocaleProvider>
+              </LocalizationProvider>
             </SettingsProvider>
           </QueryClientProvider>
         </Provider>
