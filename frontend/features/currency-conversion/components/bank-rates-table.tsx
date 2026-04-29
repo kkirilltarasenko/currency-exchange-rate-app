@@ -2,6 +2,7 @@
 
 import { Box, Button, Spinner, Text } from "@chakra-ui/react";
 import { useCurrencyRatesQuery } from "../hooks/use-currency-rates.query";
+import { useCurrencyConversionContext } from "../context/currency-conversion.context";
 import { Currency } from "../types";
 
 // Функция для форматирования даты в формат "28 апреля 2026"
@@ -39,15 +40,8 @@ const formatDateToRussian = (dateString: string): string => {
   }
 };
 
-interface BankRatesTableProps {
-  fromCurrency?: Currency;
-  toCurrency?: Currency;
-}
-
-export const BankRatesTable = ({
-  fromCurrency,
-  toCurrency,
-}: BankRatesTableProps) => {
+export const BankRatesTable = () => {
+  const { fromCurrency, toCurrency } = useCurrencyConversionContext();
   const { data: bankData, isLoading, error } = useCurrencyRatesQuery();
   console.log(bankData, "DATA");
   const filteredRates = bankData
@@ -242,7 +236,7 @@ export const BankRatesTable = ({
                   {rate.quantity}
                 </Text>
                 <Text fontWeight="500" color="black" fontSize="xs">
-                  {rate.buyIso}
+                  {rate.sellIso}
                 </Text>
               </Box>
 

@@ -2,7 +2,7 @@
 
 import { Box, Button, Input, Stack, Text } from "@chakra-ui/react";
 import { FaExchangeAlt } from "react-icons/fa";
-import { useCurrencyConversion } from "../hooks/use-currency-conversion";
+import { useCurrencyConversionContext } from "../context/currency-conversion.context";
 import { CurrencySelect } from "./currency-select";
 
 export const CurrencyConverter = () => {
@@ -18,7 +18,7 @@ export const CurrencyConverter = () => {
     updateToAmount,
     swapCurrencies,
     getExchangeRate,
-  } = useCurrencyConversion();
+  } = useCurrencyConversionContext();
 
 
   const handleFromAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
