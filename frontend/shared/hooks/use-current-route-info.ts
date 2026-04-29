@@ -17,7 +17,7 @@ export const useCurrentRouteInfo = () => {
     ));
 
     if (pageTitle) {
-      return pageTitle.title;
+      return pageTitle.titleKey;
     }
 
     return "404"

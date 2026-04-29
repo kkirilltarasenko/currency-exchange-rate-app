@@ -12,7 +12,7 @@ import {
 } from "@chakra-ui/react";
 import { LuPalette, LuCoins, LuBell, LuSettings } from "react-icons/lu";
 import { useSearchParams, useRouter } from "next/navigation";
-import { useCallback } from "react";
+import { useCallback, Suspense } from "react";
 import {
   AppearanceSettings,
   CurrencySettings,
@@ -24,7 +24,7 @@ import { LanguageSettings } from "../../features/settings/components/language-se
 import { useSettingsContext } from "../../features/settings/context/settings-provider";
 import { useTranslations } from "@/features/localization";
 
-const SettingsPage = () => {
+const SettingsContent = () => {
   const searchParams = useSearchParams();
   const router = useRouter();
   const currentTab = searchParams.get('tab') || 'appearance';
@@ -209,6 +209,21 @@ const SettingsPage = () => {
         </Box>
       </Box>
     </Box>
+  );
+};
+
+const SettingsPage = () => {
+  return (
+    <Suspense fallback={
+      <Center h="400px" data-testid="settings-loading">
+        <VStack gap={4}>
+          <Spinner size="lg" />
+          <Text>Loading...</Text>
+        </VStack>
+      </Center>
+    }>
+      <SettingsContent />
+    </Suspense>
   );
 };
 
