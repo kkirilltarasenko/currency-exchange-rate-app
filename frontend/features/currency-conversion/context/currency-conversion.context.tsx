@@ -7,6 +7,9 @@ import { useCurrencyRatesQuery } from "../hooks/use-currency-rates.query";
 const CURRENCIES: Currency[] = [
   { code: "USD", name: "US Dollar", symbol: "$" },
   { code: "BYN", name: "Belarusian Ruble", symbol: "Br" },
+  { code: "EUR", name: "Euro", symbol: "€" },
+  { code: "CNY", name: "Chinese Yuan", symbol: "¥" },
+  { code: "RUB", name: "Russian Ruble", symbol: "₽" },
 ];
 
 interface CurrencyConversionContextType {

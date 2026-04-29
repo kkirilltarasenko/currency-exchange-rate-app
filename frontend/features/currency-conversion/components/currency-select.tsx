@@ -26,7 +26,7 @@ export const CurrencySelect = ({
 }: CurrencySelectProps) => {
   const currencyCollection = createListCollection({
     items: currencies.map(currency => ({
-      label: currency.code,
+      label: `${currency.code} ${currency.symbol}`,
       value: currency.code,
       currency: currency
     }))
