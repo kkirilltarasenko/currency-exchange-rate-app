@@ -21,7 +21,7 @@ jobs:
             const sha = context.payload.workflow_run.head_sha;
             const owner = context.repo.owner;
             const repo = context.repo.repo;
-            const workflows = ["Backend CI", "Frontend CI"];
+            const workflows = ["backend.yml", "frontend.yml"];
             for (const workflow of workflows) {
               const runs = await github.rest.actions.listWorkflowRuns({
                 owner,

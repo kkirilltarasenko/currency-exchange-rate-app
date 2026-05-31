@@ -13,5 +13,8 @@ export default createMiddleware({
 
 export const config = {
   // Match only internationalized pathnames
-  matcher: [`${basePath}/`, `${basePath}/(ru|en)/:path*`],
+  matcher: [
+    "/currency-exchange-rate-app/",
+    "/currency-exchange-rate-app/(ru|en)/:path*",
+  ],
 };
