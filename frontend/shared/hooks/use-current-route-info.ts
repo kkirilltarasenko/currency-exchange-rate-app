@@ -2,7 +2,8 @@ import { usePathname } from "next/navigation";
 import { LINKS, type TRoute } from "../router/router.types";
 
 export const useCurrentRouteInfo = () => {
-  const pathname = usePathname();
+  const pathnameArray = usePathname().split("/");
+  const pathname = pathnameArray[pathnameArray.length - 1];
 
   const getIsActiveRoute = (route?: TRoute) => {
     if (!route) {
