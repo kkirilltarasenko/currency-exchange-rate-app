@@ -72,4 +72,3 @@ This directory contains GitHub Actions workflows for the Currency Exchange Rate 
 ### Test Coverage
 - Unit tests for both backend and frontend
 - E2E tests: Jest (backend), Cypress (frontend)
-- Coverage reports uploaded to Codecov
