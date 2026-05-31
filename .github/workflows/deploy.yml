@@ -10,15 +10,8 @@ permissions:
 
 jobs:
   deploy:
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    if: ${{ false }}
     runs-on: ubuntu-latest
     steps:
-      - name: Trigger Render deploy hook
-        env:
-          RENDER_DEPLOY_HOOK_URL: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
-        run: |
-          if [ -z "${RENDER_DEPLOY_HOOK_URL}" ]; then
-            echo "RENDER_DEPLOY_HOOK_URL is not set"
-            exit 1
-          fi
-          curl -fsSL -X POST "${RENDER_DEPLOY_HOOK_URL}"
+      - name: Render deploy disabled (not used)
+        run: echo "Render deploy step skipped"

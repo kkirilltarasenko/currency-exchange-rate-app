@@ -1,5 +1,7 @@
 export const API_CONFIG = {
-  BASE_URL: process.env.NEXT_PUBLIC_API_URL || "http://localhost:3002",
+  BASE_URL:
+    process.env.NEXT_PUBLIC_API_URL ||
+    "https://currency-exchange-rate-app-iota.vercel.app",
 } as const;
 
 export const API_ENDPOINTS = {

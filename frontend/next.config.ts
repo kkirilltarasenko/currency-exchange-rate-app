@@ -4,8 +4,7 @@ import createNextIntlPlugin from "next-intl/plugin";
 const withNextIntl = createNextIntlPlugin("./i18n.ts");
 
 const basePath = "/currency-exchange-rate-app";
-const apiBaseUrl =
-  "https://kkirilltarasenko.github.io/currency-exchange-rate-app/api";
+const apiBaseUrl = "https://currency-exchange-rate-app-iota.vercel.app";
 
 const nextConfig: NextConfig = {
   output: "export",
