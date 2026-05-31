@@ -2,7 +2,7 @@ name: Deploy Next.js site to Pages
 
 on:
   workflow_run:
-    workflows: ["Deploy Backend"]
+    workflows: ["Frontend CI"]
     types: [completed]
 
 permissions:
