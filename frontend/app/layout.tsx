@@ -29,19 +29,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-        suppressHydrationWarning
       >
         <Provider>
           <QueryClientProvider>
             <SettingsProvider>
               <LocalizationProvider>
                 <LocaleProvider>
-                  <MainLayout>
-                    {children}
-                  </MainLayout>
+                  <MainLayout>{children}</MainLayout>
                   <SettingsSyncIndicator />
                 </LocaleProvider>
               </LocalizationProvider>
