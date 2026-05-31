@@ -1,0 +1,71 @@
+name: Build Backend Docker Image
+
+on:
+  workflow_run:
+    workflows: ["Backend CI", "Frontend CI"]
+    types: [completed]
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  build-image:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ensure backend and frontend CI are successful (if run)
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const sha = context.payload.workflow_run.head_sha;
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const workflows = ["Backend CI", "Frontend CI"];
+            for (const workflow of workflows) {
+              const runs = await github.rest.actions.listWorkflowRuns({
+                owner,
+                repo,
+                workflow_id: workflow,
+                head_sha: sha,
+                status: "completed",
+                per_page: 1
+              });
+              if (runs.data.workflow_runs.length === 0) {
+                core.info(`Workflow ${workflow} not found for sha ${sha}. Skipping gate for it.`);
+                continue;
+              }
+              if (runs.data.workflow_runs[0].conclusion !== "success") {
+                core.setFailed(`Workflow ${workflow} did not succeed for sha ${sha}`);
+              }
+            }
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
+      - name: Set image tags
+        run: |
+          IMAGE_NAME="ghcr.io/${{ github.repository_owner }}/currency-exchange-rate-backend"
+          SHA="${{ github.event.workflow_run.head_sha }}"
+          BRANCH="${{ github.event.workflow_run.head_branch }}"
+          TAGS="${IMAGE_NAME}:sha-${SHA}"
+          if [ "${BRANCH}" = "main" ]; then
+            TAGS="${TAGS},${IMAGE_NAME}:latest"
+          fi
+          echo "IMAGE_NAME=${IMAGE_NAME}" >> $GITHUB_ENV
+          echo "TAGS=${TAGS}" >> $GITHUB_ENV
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v6
+        with:
+          context: ./backend
+          file: ./backend/Dockerfile
+          push: true
+          tags: ${{ env.TAGS }}

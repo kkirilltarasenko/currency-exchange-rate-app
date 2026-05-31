@@ -1,15 +1,17 @@
-import createMiddleware from 'next-intl/middleware';
-import { locales } from './i18n';
+import createMiddleware from "next-intl/middleware";
+import { locales } from "./i18n";
+
+const basePath = "/currency-exchange-rate-app";
 
 export default createMiddleware({
   // A list of all locales that are supported
   locales,
 
   // Used when no locale matches
-  defaultLocale: 'ru'
+  defaultLocale: "ru",
 });
 
 export const config = {
   // Match only internationalized pathnames
-  matcher: ['/', '/(ru|en)/:path*']
+  matcher: [`${basePath}/`, `${basePath}/(ru|en)/:path*`],
 };

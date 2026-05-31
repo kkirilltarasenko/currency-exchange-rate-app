@@ -12,9 +12,9 @@ This directory contains GitHub Actions workflows for the Currency Exchange Rate 
 **Pipeline Steps:**
 1. **Linting** - ESLint code quality checks
 2. **Building** - NestJS application build
-3. **Testing** - Unit tests and E2E tests
+3. **Testing** - Unit tests
 
-**Matrix Strategy:** Tests on Node.js 18.x and 20.x
+**Matrix Strategy:** Node.js 20.x
 
 ### 2. Frontend CI (`frontend.yml`)
 **Triggers:**
@@ -26,8 +26,40 @@ This directory contains GitHub Actions workflows for the Currency Exchange Rate 
 2. **Building** - Next.js application build
 3. **Testing** - Jest unit tests and Cypress E2E tests
 
-**Matrix Strategy:** Tests on Node.js 18.x and 20.x
-**Package Manager:** Uses pnpm as specified in package.json
+**Matrix Strategy:** Node.js 20.x  
+**Package Manager:** pnpm as specified in `frontend/package.json`
+
+### 3. Build Backend Docker Image (`nestjs.yml`)
+**Triggers:**
+- `workflow_run` after **Backend CI** and **Frontend CI** complete successfully
+
+**Pipeline Steps:**
+- Build and push Docker image to **GitHub Container Registry (GHCR)**
+
+**Image Tags:**
+- `sha-<commit>` for every run
+- `latest` for `main` branch
+
+### 4. Deploy Backend (`deploy.yml`)
+**Triggers:**
+- `workflow_run` after **Build Backend Docker Image** succeeds
+
+**Pipeline Steps:**
+- Trigger Render deploy hook using `RENDER_DEPLOY_HOOK_URL` secret
+
+### 5. Deploy Frontend to GitHub Pages (`nextjs.yml`)
+**Triggers:**
+- `workflow_run` after **Deploy Backend** succeeds
+
+**Pipeline Steps:**
+- Build Next.js static export
+- Deploy to GitHub Pages
+
+### Flow Summary
+1. **Backend CI** + **Frontend CI** run in parallel (path-based)
+2. **Build Backend Docker Image** (`nestjs.yml`)
+3. **Deploy Backend** (`deploy.yml`)
+4. **Deploy Frontend** (`nextjs.yml`)
 
 ### Path-based Triggering
 - Backend workflow only runs when backend or contracts code changes
@@ -39,6 +71,5 @@ This directory contains GitHub Actions workflows for the Currency Exchange Rate 
 
 ### Test Coverage
 - Unit tests for both backend and frontend
-- E2E tests using Jest (backend) and Cypress (frontend)
-- Integration tests in the full pipeline
+- E2E tests: Jest (backend), Cypress (frontend)
 - Coverage reports uploaded to Codecov
