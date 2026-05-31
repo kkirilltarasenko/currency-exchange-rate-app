@@ -1,6 +1,14 @@
 "use client";
 
-import React, { createContext, useContext, useCallback, useEffect, useState, ReactNode, useMemo } from "react";
+import React, {
+  createContext,
+  useContext,
+  useCallback,
+  useEffect,
+  useState,
+  ReactNode,
+  useMemo,
+} from "react";
 import { ConversionResult, Currency } from "../types";
 import { useCurrencyRatesQuery } from "../hooks/use-currency-rates.query";
 import { useAppSettings } from "../../../shared/hooks/use-app-settings";
@@ -23,32 +31,48 @@ interface CurrencyConversionContextType {
   setToCurrency: (currency: Currency) => void;
   updateFromAmount: (amount: number) => void;
   updateToAmount: (amount: number) => void;
-  convertCurrency: (amount: number, from: Currency, to: Currency) => Promise<ConversionResult>;
+  convertCurrency: (
+    amount: number,
+    from: Currency,
+    to: Currency,
+  ) => Promise<ConversionResult>;
   swapCurrencies: () => void;
   getExchangeRate: (from: Currency, to: Currency) => number;
 }
 
-export const CurrencyConversionContext = createContext<CurrencyConversionContextType | undefined>(undefined);
+export const CurrencyConversionContext = createContext<
+  CurrencyConversionContextType | undefined
+>(undefined);
 
 interface CurrencyConversionProviderProps {
   children: ReactNode;
 }
 
-export const CurrencyConversionProvider = ({ children }: CurrencyConversionProviderProps) => {
+export const CurrencyConversionProvider = ({
+  children,
+}: CurrencyConversionProviderProps) => {
   const { defaultBaseCurrency, defaultTargetCurrency } = useAppSettings();
-  
+
   // Мемоизируем валюты по умолчанию из настроек
   const defaultFromCurrency = useMemo(() => {
-    return CURRENCIES.find(c => c.code === defaultBaseCurrency) || CURRENCIES[0];
+    return (
+      CURRENCIES.find((c) => c.code === defaultBaseCurrency) || CURRENCIES[0]
+    );
   }, [defaultBaseCurrency]);
-  
+
   const defaultToCurrency = useMemo(() => {
-    return CURRENCIES.find(c => c.code === defaultTargetCurrency) || CURRENCIES[1];
+    return (
+      CURRENCIES.find((c) => c.code === defaultTargetCurrency) || CURRENCIES[1]
+    );
   }, [defaultTargetCurrency]);
 
   // Используем функцию инициализации для useState
-  const [fromCurrency, setFromCurrency] = useState<Currency>(() => defaultFromCurrency);
-  const [toCurrency, setToCurrency] = useState<Currency>(() => defaultToCurrency);
+  const [fromCurrency, setFromCurrency] = useState<Currency>(
+    () => defaultFromCurrency,
+  );
+  const [toCurrency, setToCurrency] = useState<Currency>(
+    () => defaultToCurrency,
+  );
   const [fromAmount, setFromAmount] = useState<number>(1);
   const [toAmount, setToAmount] = useState<number>(0);
   const [isLoading, setIsLoading] = useState(false);
@@ -57,13 +81,13 @@ export const CurrencyConversionProvider = ({ children }: CurrencyConversionProvi
 
   const { data: bankData, isLoading: isLoadingRates } = useCurrencyRatesQuery();
 
-  // Синхронизируем валюты с настройками при их изменении
-  if (fromCurrency.code !== defaultFromCurrency.code) {
-    setFromCurrency(defaultFromCurrency);
-  }
-  if (toCurrency.code !== defaultToCurrency.code) {
-    setToCurrency(defaultToCurrency);
-  }
+  // Логируем изменения валют для диагностики
+  useEffect(() => {
+    console.debug("[CurrencyConversion] currency change", {
+      from: fromCurrency.code,
+      to: toCurrency.code,
+    });
+  }, [fromCurrency.code, toCurrency.code]);
 
   const getBestExchangeRate = useCallback(
     (from: Currency, to: Currency): number => {
@@ -198,7 +222,7 @@ export const CurrencyConversionProvider = ({ children }: CurrencyConversionProvi
     // Принудительно пересчитываем поле "Получу" после свопа
     setTimeout(() => {
       setIsSwapping(false);
-      
+
       // Пересчитываем только поле "Получу" на основе нового курса
       const newRate = getBestExchangeRate(newFromCurrency, newToCurrency);
       setToAmount(newFromAmount * newRate);
@@ -241,7 +265,9 @@ export const CurrencyConversionProvider = ({ children }: CurrencyConversionProvi
 export const useCurrencyConversionContext = () => {
   const context = useContext(CurrencyConversionContext);
   if (context === undefined) {
-    throw new Error('useCurrencyConversionContext must be used within a CurrencyConversionProvider');
+    throw new Error(
+      "useCurrencyConversionContext must be used within a CurrencyConversionProvider",
+    );
   }
   return context;
 };

@@ -41,8 +41,8 @@ class BelarusBankService extends abstract_bank_module_1.AbstractBank {
     }
     transformRates(data) {
         const date = new Date().toISOString();
-        const buy = data[`USD_in`];
-        const sell = data[`USD_out`];
+        const buy = data['USD_in'];
+        const sell = data['USD_out'];
         if (!buy || !sell || buy === '0.0000' || sell === '0.0000') {
             return undefined;
         }

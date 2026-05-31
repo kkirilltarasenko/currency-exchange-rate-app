@@ -20,22 +20,22 @@ let SettingsController = class SettingsController {
     constructor(settingsService) {
         this.settingsService = settingsService;
     }
-    async getSettings() {
-        const settings = await this.settingsService.getSettings();
+    getSettings() {
+        const settings = this.settingsService.getSettings();
         return {
             success: true,
             data: settings,
         };
     }
-    async updateSettings(request) {
-        const updatedSettings = await this.settingsService.updateSettings(request.settings);
+    updateSettings(request) {
+        const updatedSettings = this.settingsService.updateSettings(request.settings);
         return {
             success: true,
             data: updatedSettings,
         };
     }
-    async resetSettings() {
-        const defaultSettings = await this.settingsService.resetSettings();
+    resetSettings() {
+        const defaultSettings = this.settingsService.resetSettings();
         return {
             success: true,
             data: defaultSettings,
@@ -47,20 +47,20 @@ __decorate([
     (0, common_1.Get)(),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
-    __metadata("design:returntype", Promise)
+    __metadata("design:returntype", Object)
 ], SettingsController.prototype, "getSettings", null);
 __decorate([
     (0, common_1.Put)(),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
-    __metadata("design:returntype", Promise)
+    __metadata("design:returntype", Object)
 ], SettingsController.prototype, "updateSettings", null);
 __decorate([
     (0, common_1.Post)('reset'),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
-    __metadata("design:returntype", Promise)
+    __metadata("design:returntype", Object)
 ], SettingsController.prototype, "resetSettings", null);
 exports.SettingsController = SettingsController = __decorate([
     (0, common_1.Controller)('settings'),

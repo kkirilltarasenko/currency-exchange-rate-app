@@ -1,13 +1,20 @@
-import { FiBarChart, FiHome, FiSettings, FiTrendingUp } from "react-icons/fi";
+import {
+  FiBarChart,
+  FiHome,
+  FiMapPin,
+  FiSettings,
+  FiTrendingUp,
+} from "react-icons/fi";
 
 export const Routes = {
   HOME: "/home",
   RATES: "/exchange-rates",
   HISTORY: "/history",
+  MAP: "/map",
   SETTINGS: "/settings",
 } as const;
 
-export type TRoute = typeof Routes[keyof typeof Routes];
+export type TRoute = (typeof Routes)[keyof typeof Routes];
 
 export const LINKS = [
   {
@@ -29,9 +36,15 @@ export const LINKS = [
     disabled: true,
   },
   {
+    titleKey: "navigation.map",
+    path: Routes.MAP,
+    icon: FiMapPin,
+    disabled: false,
+  },
+  {
     titleKey: "navigation.settings",
     path: Routes.SETTINGS,
     icon: FiSettings,
     disabled: false,
-  }
-] as const
+  },
+] as const;

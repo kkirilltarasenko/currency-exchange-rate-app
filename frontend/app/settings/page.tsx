@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import {
   Box,
@@ -10,13 +10,12 @@ import {
   Spinner,
   Center,
 } from "@chakra-ui/react";
-import { LuPalette, LuCoins, LuBell, LuSettings } from "react-icons/lu";
+import { LuPalette, LuCoins, LuSettings } from "react-icons/lu";
 import { useSearchParams, useRouter } from "next/navigation";
 import { useCallback, Suspense } from "react";
 import {
   AppearanceSettings,
   CurrencySettings,
-  NotificationsSettings,
   SettingsManagement,
 } from "../../features/settings";
 import { ServerStatus } from "../../features/settings/components/server-status";
@@ -27,33 +26,33 @@ import { useTranslations } from "@/features/localization";
 const SettingsContent = () => {
   const searchParams = useSearchParams();
   const router = useRouter();
-  const currentTab = searchParams.get('tab') || 'appearance';
+  const currentTab = searchParams.get("tab") || "appearance";
   const { t } = useTranslations();
 
   const {
     settings,
     isLoading,
-    error,
     updateSetting,
     resetSettings,
     exportSettings,
     importSettings,
-    isUpdating,
-    isResetting,
   } = useSettingsContext();
 
-  const handleTabChange = useCallback((details: { value: string }) => {
-    const params = new URLSearchParams(searchParams);
-    params.set('tab', details.value);
-    router.push(`/settings?${params.toString()}`, { scroll: false });
-  }, [searchParams, router]);
+  const handleTabChange = useCallback(
+    (details: { value: string }) => {
+      const params = new URLSearchParams(searchParams);
+      params.set("tab", details.value);
+      router.push(`/settings?${params.toString()}`, { scroll: false });
+    },
+    [searchParams, router],
+  );
 
   if (isLoading) {
     return (
       <Center h="400px" data-testid="settings-loading">
         <VStack gap={4}>
           <Spinner size="lg" />
-          <Text>{t('common.loading')}</Text>
+          <Text>{t("common.loading")}</Text>
         </VStack>
       </Center>
     );
@@ -62,7 +61,7 @@ const SettingsContent = () => {
   const tabItems = [
     {
       value: "appearance",
-      label: t('settings.appearance'),
+      label: t("settings.appearance"),
       icon: LuPalette,
       content: (
         <VStack gap={6} align="stretch">
@@ -76,18 +75,15 @@ const SettingsContent = () => {
     },
     {
       value: "currency",
-      label: t('settings.currency'),
+      label: t("settings.currency"),
       icon: LuCoins,
       content: (
-        <CurrencySettings
-          settings={settings}
-          onUpdateSetting={updateSetting}
-        />
+        <CurrencySettings settings={settings} onUpdateSetting={updateSetting} />
       ),
     },
     {
       value: "management",
-      label: t('settings.advanced'),
+      label: t("settings.advanced"),
       icon: LuSettings,
       content: (
         <SettingsManagement
@@ -113,7 +109,7 @@ const SettingsContent = () => {
         overflow="hidden"
         _dark={{
           bg: "gray.800",
-          borderColor: "gray.700"
+          borderColor: "gray.700",
         }}
       >
         <Box p={8} h="100%">
@@ -121,10 +117,10 @@ const SettingsContent = () => {
             {/* Header Section */}
             <Box textAlign="left" flexShrink={0}>
               <Heading size="lg" mb={2} color="fg.emphasized">
-                {t('settings.title')}
+                {t("settings.title")}
               </Heading>
               <Text color="fg.muted" fontSize="md">
-                {t('settings.description')}
+                {t("settings.description")}
               </Text>
             </Box>
 
@@ -174,15 +170,15 @@ const SettingsContent = () => {
                           _selected={{
                             bg: "bg.emphasized",
                             color: "fg.emphasized",
-                            boxShadow: "sm"
+                            boxShadow: "sm",
                           }}
                           _hover={{
                             bg: "bg.subtle",
-                            color: "fg"
+                            color: "fg",
                           }}
                           transition="all 0.2s"
                         >
-                          <Icon style={{ marginRight: '8px' }} size={18} />
+                          <Icon style={{ marginRight: "8px" }} size={18} />
                           {tab.label}
                         </Tabs.Trigger>
                       );
@@ -214,14 +210,16 @@ const SettingsContent = () => {
 
 const SettingsPage = () => {
   return (
-    <Suspense fallback={
-      <Center h="400px" data-testid="settings-loading">
-        <VStack gap={4}>
-          <Spinner size="lg" />
-          <Text>Loading...</Text>
-        </VStack>
-      </Center>
-    }>
+    <Suspense
+      fallback={
+        <Center h="400px" data-testid="settings-loading">
+          <VStack gap={4}>
+            <Spinner size="lg" />
+            <Text>Loading...</Text>
+          </VStack>
+        </Center>
+      }
+    >
       <SettingsContent />
     </Suspense>
   );

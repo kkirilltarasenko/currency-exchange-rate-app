@@ -28,17 +28,17 @@ const DEFAULT_SETTINGS = {
 };
 let SettingsService = class SettingsService {
     currentSettings = { ...DEFAULT_SETTINGS };
-    async getSettings() {
+    getSettings() {
         return { ...this.currentSettings };
     }
-    async updateSettings(partialSettings) {
+    updateSettings(partialSettings) {
         this.currentSettings = {
             ...this.currentSettings,
             ...partialSettings,
         };
         return { ...this.currentSettings };
     }
-    async resetSettings() {
+    resetSettings() {
         this.currentSettings = { ...DEFAULT_SETTINGS };
         return { ...this.currentSettings };
     }

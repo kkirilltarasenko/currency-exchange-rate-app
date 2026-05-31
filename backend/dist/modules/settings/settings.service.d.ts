@@ -18,7 +18,7 @@ export interface AppSettings {
 }
 export declare class SettingsService {
     private currentSettings;
-    getSettings(): Promise<AppSettings>;
-    updateSettings(partialSettings: Partial<AppSettings>): Promise<AppSettings>;
-    resetSettings(): Promise<AppSettings>;
+    getSettings(): AppSettings;
+    updateSettings(partialSettings: Partial<AppSettings>): AppSettings;
+    resetSettings(): AppSettings;
 }

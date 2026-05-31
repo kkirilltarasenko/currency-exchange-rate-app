@@ -32,6 +32,7 @@
     "home": "Home",
     "exchangeRates": "Exchange Rates",
     "history": "History",
+    "map": "Map",
     "settings": "Settings",
     "currencyConverter": "Currency Exchange"
   },
@@ -144,6 +145,9 @@
       "1800": "30 minutes",
       "3600": "1 hour"
     }
+  },
+  "map": {
+    "description": "Interactive map with bank branches and opening hours"
   },
   "banks": {
     "alfabank": "Alfa Bank",

@@ -1,16 +1,23 @@
-"use client"
+"use client";
 
 import { Box } from "@chakra-ui/react";
 import { Sidebar } from "./sidebar";
 import { Topbar } from "./topbar";
 
 interface MainLayoutProps {
-  children: React.ReactNode
+  children: React.ReactNode;
 }
 
 export function MainLayout({ children }: MainLayoutProps) {
   return (
-    <Box minH="100vh" bg="transparent" display="flex" justifyContent="center" alignItems="center" p={4}>
+    <Box
+      minH="100vh"
+      bg="transparent"
+      display="flex"
+      justifyContent="center"
+      alignItems="center"
+      p={4}
+    >
       <Box
         w="85vw"
         h="85vh"
@@ -24,17 +31,11 @@ export function MainLayout({ children }: MainLayoutProps) {
         data-testid="main-layout"
       >
         <Sidebar />
-        
-        <Box
-          ml="280px"
-          p={3}
-          h="100%"
-          overflow="auto"
-          bg="bg.subtle"
-        >
+        <Topbar />
+        <Box ml="280px" p={3} h="100%" overflow="auto" bg="bg.subtle" pt="70px">
           {children}
         </Box>
       </Box>
     </Box>
-  )
+  );
 }

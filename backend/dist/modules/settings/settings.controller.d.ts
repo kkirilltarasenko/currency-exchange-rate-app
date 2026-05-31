@@ -17,8 +17,8 @@ interface ResetSettingsResponse {
 export declare class SettingsController {
     private readonly settingsService;
     constructor(settingsService: SettingsService);
-    getSettings(): Promise<GetSettingsResponse>;
-    updateSettings(request: UpdateSettingsRequest): Promise<UpdateSettingsResponse>;
-    resetSettings(): Promise<ResetSettingsResponse>;
+    getSettings(): GetSettingsResponse;
+    updateSettings(request: UpdateSettingsRequest): UpdateSettingsResponse;
+    resetSettings(): ResetSettingsResponse;
 }
 export {};
